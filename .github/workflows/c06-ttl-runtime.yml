@@ -1,0 +1,68 @@
+name: C-06 live lease TTL and recovery budget
+on:
+  push:
+    branches:
+      - qualification/c06-h00-live-20261024
+permissions: {}
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: |
+          python3 scripts/qualify.py manifest --checkout .
+          python3 -m unittest tests.test_c06_ttl -v
+  seed:
+    needs: tests
+    if: contains(github.event.head_commit.message, '[c06-ttl-seed]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Create future deadline and crash with durable checkpoint
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_ttl seed
+  recovery:
+    needs: tests
+    if: contains(github.event.head_commit.message, '[c06-ttl-recover]')
+    strategy:
+      fail-fast: false
+      matrix:
+        contender: [alpha, beta]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: CAS recover strictly after wall clock TTL
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_ttl recover ${{ matrix.contender }}
+  verify:
+    needs: recovery
+    if: contains(github.event.head_commit.message, '[c06-ttl-recover]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify terminal state and capped attempt budget
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_ttl verify

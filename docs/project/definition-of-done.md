@@ -1,14 +1,27 @@
-# Definition of Done — public C-05 test only
+# Definition of Done — public synthetic qualification only
 
-- [ ] Protected public `main` verified server-side, with CI required.
-- [ ] Full immutable source SHA explicitly approved in repository variable.
-- [ ] Real W-01 model call PASS with read-only repository permissions.
-- [ ] Tokenless E1 PASS, including deliberate failure detection.
-- [ ] Distinct fresh J-01 model reviewer PASS, including rejection control.
-- [ ] Tokenless stage/preflight PASS with exact hash-bound synthetic evidence.
-- [ ] Trusted publisher created exactly one DRAFT PR, with exactly two authorized changed files.
-- [ ] Duplicate dispatch for the same SHA reuses the verified PR without writing duplicates.
-- [ ] Tampering/invalid scopes/unauthorized source and protected-ref write tests reject correctly.
-- [ ] Independent review of branch rules and runtime identity completed.
+## C-05 bounded publisher
 
-A passing public C-05 does not imply private-repository readiness, H-00 recovery or full Mode C PROVEN.
+- [x] Protected public `main` verified server-side; required `quality` CI.
+- [x] Full immutable source SHA owner-authorized for the successful synthetic workflow.
+- [x] Real W-01 model call with read-only repository access.
+- [x] Tokenless E1 and a distinct fresh J-01 inference on SHA-bound source.
+- [x] Tokenless stage/preflight and trusted publisher created exactly one draft PR, exactly two allowed files.
+- [x] Publisher rerun reused draft PR #2 without duplicate commits or PRs.
+- [x] Hosted read-only negative tests (tamper, reviewer reject, wrong scopes, stale base and unprotected-ref model) plus PR CI.
+- [ ] Explicit live GitHub rejected unauthorized-source workflow dispatch and server-enforced protected-ref denial.
+- [ ] Independent security review/signoff of repo roles, boundaries and evidence.
+
+## C-06 synthetic H-00 state
+
+- [x] Durable Git ref checkpoint survives actual injected workflow failure across different runs.
+- [x] Separate concurrent GitHub writers use non-force CAS, one wins, loser avoids duplicate completion.
+- [x] Independent fresh-runner readback and third-run replay confirm exactly two state transitions.
+- [x] Version-bound unit security tests and source SHA256/E1 pass on latest replay candidate.
+- [x] Real wall-clock lease TTL tested on separate GitHub Actions runs: premature recovery denied, 15-second expiry then CAS takeover; state attempt budget fixed at one (see `docs/c06-evidence.md`).
+- [ ] Model/API cost budgets, overall workflow deadlines, exhaustive bounded-retry failure-path evidence under interruption.
+- [x] Bounded synthetic multi-workpackage queue: P1 failure/recovery, P2 automatically started in next GitHub job, P3 denied at 2/2 synthetic units; durable ref verified and replay unchanged.
+- [ ] Fully unattended cross-workflow-run crash recovery, real provider/API cost caps, hostile-writer fencing, larger multi-package scheduling and fairness.
+- [ ] Independent security review and controller integration with second distinct consumer.
+
+**None of these public checks authorizes** protected `main` merges, private repository writes, other projects, or full Mode C activation. Candidate only, NOT ADOPTED.
