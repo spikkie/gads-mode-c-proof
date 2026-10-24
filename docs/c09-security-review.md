@@ -29,3 +29,12 @@ The proposed `workflow_run: completed` trigger is GitHub's native mechanism to w
 - [ ] Separate decision for any future write token, real provider budget meter and hostile-writer fencing. No auto-merge.
 
 **Decision requested:** `SECURITY_REVIEW_REQUIRED`; no adoption or main integration yet.
+
+## Github-hosted read-only evidence — 2026-10-24
+
+- [C-09 smoke workflow #40119549833](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40119549833) SUCCESS at SHA `8cc76aa0fd08d1d1a2683f30f796305703d5b5c1`. **16/16** negative/positive identity unit tests PASS. Live GitHub API readback confirmed actual failed C-08 run `40095804830`, its correct immutable SHA and workflow ID, and reconciled C-08 terminal ref SHA `d09cabb5c384ab376bb52b85541a8118c90785c8` without mutation.
+- [E1 workflow #40119549792](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40119549792) SUCCESS on that same source SHA.
+- A follow-up static contract suite now enforces read-only permissions, default-branch-only source checkout and absence of unsafe event-derived execution. Final-head GitHub CI acceptance is mandatory.
+- **NO NATIVE `workflow_run` EVENT PROVEN:** GitHub requires the listener file on default `main`. This is deliberately a DRAFT candidate, NOT permission to merge.
+
+Open: independent third-party review, freshness-aware generalized run allowlist, read-only-to-writer authorization split, actual unattended recovery after a *new* crash, and real AI-spend quotas.
