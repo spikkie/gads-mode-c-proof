@@ -9,3 +9,5 @@
 - **Open:** real lease TTL/deadline budgets, hostile stale-writer fencing, multi-workpackage H-00 control-loop scheduling, unattended future dispatch, independent security approval, second consumer and private-repository qualification. No main merge, production change, or private repository source publication.
 
 **Verdict:** `C05_PUBLIC_POSITIVE_NEGATIVE_PASS / C06_SYNTHETIC_GITCAS_RESTART_PASS / SECURITY_AND_AUTONOMY_GATES_OPEN`.
+
+- **C-06 live TTL/deadline follow-up (2026-10-24):** independent future-deadline seed [#40090945426](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40090945426) failed intentionally after persisting state; pre-expiry rejection observed. Later concurrent recovery [#40091035825](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40091035825) SUCCESS, one CAS winner (beta), loser safely backed off; runtime enforced `attempts=1/max_attempts=1` and `generation=2`; readback state ref `3411cf9b588349670f9b8c5edcf0ceb37b8d2b1a`. E1 #40091039642 SUCCESS. **Clock TTL qualified for this bounded one-package public test only.** Remaining cost budgets, automatic next-package schedule and hostile-ref fencing OPEN.

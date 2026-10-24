@@ -18,7 +18,8 @@
 - [x] Separate concurrent GitHub writers use non-force CAS, one wins, loser avoids duplicate completion.
 - [x] Independent fresh-runner readback and third-run replay confirm exactly two state transitions.
 - [x] Version-bound unit security tests and source SHA256/E1 pass on latest replay candidate.
-- [ ] Real wall-clock lease TTL/deadline expiry; bounded retries and cost budgets under interruption.
+- [x] Real wall-clock lease TTL tested on separate GitHub Actions runs: premature recovery denied, 15-second expiry then CAS takeover; state attempt budget fixed at one (see `docs/c06-evidence.md`).
+- [ ] Model/API cost budgets, overall workflow deadlines, exhaustive bounded-retry failure-path evidence under interruption.
 - [ ] Hostile stale-owner fencing, multiple queued workpackages and automatic next-package dispatch.
 - [ ] Independent security review and controller integration with second distinct consumer.
 

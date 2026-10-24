@@ -6,3 +6,6 @@
 4. Extend from one synthetic workpackage to H-00 durable queue, live fencing and fail-closed recovery; prove unattended next-workpackage trigger rather than human-pushed phase changes.
 5. Qualify a second unlike-stack synthetic consumer, then separately review safe private-repository publisher architecture. No production or private code copy.
 6. Preserve current public draft PRs unmerged and protected `main`; adoption and integration to any private repository require explicit independent security/human approval.
+
+7. **EVIDENCED:** Follow-up clock-based 15-second TTL and one allowed state recovery attempt on real GitHub runners. Verify exact live runs in `docs/c06-evidence.md`; deadline proof does not imply cost management.
+8. **NEXT:** bounded cost/deadline enforcement, stale-writer fencing beyond honest Git ref CAS, and unattended transition to the next workpackage. Independent review before merge/adoption.
