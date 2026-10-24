@@ -1,0 +1,28 @@
+name: C-10 cross-branch live authority inventory
+on:
+  push:
+    branches:
+      - qualification/c10-least-privilege-20261024
+permissions: {}
+jobs:
+  authority_inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install pinned YAML parser in isolated venv
+        run: |
+          python3 -m venv .ci-venv
+          .ci-venv/bin/python -m pip install -r requirements.txt
+      - name: Run source manifest and branch-authority negative unit tests
+        run: |
+          python3 scripts/qualify.py manifest --checkout .
+          .ci-venv/bin/python -m unittest tests.test_c10_authority -v
+      - name: Enumerate actual branch HEAD workflows with read-only GitHub API
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .ci-venv/bin/python -m scripts.c10_authority

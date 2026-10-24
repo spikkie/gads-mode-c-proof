@@ -49,3 +49,14 @@ C-07 PASS is an isolated public infrastructure proof, not adoption of Mode C in 
 - [ ] Independent security review and owner signoff before merge/adoption.
 
 C-08 is an isolated public synthetic candidate only; **no private-repository authorization**.
+
+## C-10 effective branch authority and quarantine
+
+- [x] Read-only workflow enumerates actual GitHub SHA-pinned YAML on each known qualification branch rather than only current checkout.
+- [x] Detects push/PR-triggerable `contents:write` and `actions:write` at job/workflow scope with adversarial unit tests.
+- [x] Live GitHub run documents actual 12 write-capable jobs on 3 unprotected branches; gate blocks rather than falsely qualifying them.
+- [ ] Review-approved protection/quarantine of *existing* C-06/C-07/C-08 branch runtime workflows; preserve historical immutable evidence and PR provenance.
+- [ ] Prevent later reintroduction of write-capable code via unreviewed branch modification; verify GitHub effective rules, not only static source.
+- [ ] Independent security reviewer approval and owner adoption gate; real model-cost budgets and unattended new-run recovery still open.
+
+**C-10 is a candidate inventory, not remediation nor release approval.**
