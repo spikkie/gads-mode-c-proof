@@ -137,9 +137,9 @@ def check_source(api):
     return sha
 
 
-def read_state(api):
+def read_state(api, ref=STATE_BRANCH, path=STATE_FILE, validation=validate):
     try:
-        ref = api.call("GET", "/git/ref/heads/" + STATE_BRANCH)
+        ref = api.call("GET", "/git/ref/heads/" + ref)
     except HttpFailure as err:
         if err.status == 404:
             return None
@@ -147,19 +147,19 @@ def read_state(api):
     tip = ref.get("object", {}).get("sha", "")
     if not HEX40.fullmatch(tip):
         raise Blocked("STATE_REF_IDENTITY")
-    path = "/contents/" + STATE_FILE + "?ref=" + urllib.parse.quote(STATE_BRANCH, safe="")
-    entry = api.call("GET", path)
-    if entry.get("path") != STATE_FILE or entry.get("type") != "file":
+    url = "/contents/" + path + "?ref=" + urllib.parse.quote(tip, safe="")
+    entry = api.call("GET", url)
+    if entry.get("path") != path or entry.get("type") != "file":
         raise Blocked("STATE_BLOB_PATH")
     raw = base64.b64decode(entry["content"], validate=False)
     if digest_blob(raw) != entry.get("sha"):
         raise Blocked("STATE_BLOB_HASH")
     if raw != encode_state(json.loads(raw)):
         raise Blocked("STATE_NOT_CANONICAL")
-    return tip, validate(json.loads(raw))
+    return tip, validation(json.loads(raw))
 
 
-def build_commit(api, parent, data, msg):
+def build_commit(api, parent, data, msg, path=STATE_FILE):
     obj = api.call("GET", "/git/commits/" + parent)
     blob = api.call("POST", "/git/blobs", {
         "content": base64.b64encode(data).decode("ascii"), "encoding": "base64"})
@@ -167,7 +167,7 @@ def build_commit(api, parent, data, msg):
         raise Blocked("CREATED_BLOB_HASH")
     tree = api.call("POST", "/git/trees", {
         "base_tree": obj["tree"]["sha"],
-        "tree": [{"path": STATE_FILE, "mode": "100644", "type": "blob", "sha": blob["sha"]}]})
+        "tree": [{"path": path, "mode": "100644", "type": "blob", "sha": blob["sha"]}]})
     commit = api.call("POST", "/git/commits", {
         "message": msg, "tree": tree["sha"], "parents": [parent]})
     if not HEX40.fullmatch(commit.get("sha", "")):
