@@ -11,3 +11,5 @@ Public synthetic **qualification candidate v0.1.0**. The public C-05 autonomous 
 2026-10-24: C-07 public synthetic cross-run workflow dispatch evidence complete (dispatcher run #40093584738, C-05 target #40093613654). Security review, protection against hostile untrusted branch code, and whole-run H-00 recovery still OPEN. Draft branch only, NO MERGE / NO ADOPTION.
 
 2026-10-24: C-08 separate full-run fault and real GitHub target-run reconciliation candidate evidenced by #40095804830 (expected failure) and #40095926987 (recovery success). Still **NOT ADOPTED / NO MERGE**. The entire-run automatic scheduler and privileged security gates remain OPEN.
+
+2026-10-24: C-10 real GitHub branch-head write authority scanner qualified at unit/E1 level but **BLOCKED** on live existing risk: 12 writer jobs, 3 unprotected branches. Review-only candidate, security issue #8 OPEN, protected main untouched. No release/adoption.

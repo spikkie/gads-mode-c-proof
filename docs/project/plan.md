@@ -18,3 +18,6 @@
 
 13. **EVIDENCED:** C-08 persisted a synthetic lost-dispatch acknowledgement and ended an entire GitHub workflow with injected failure (run #40095804830). A separate manually initiated run (#40095926987) matched the genuine C-07->C-05 target via GitHub API, committed CONFIRMED_SUCCESS and passed idempotent verifier replay. See `docs/c08-recovery-evidence.md`.
 14. **NEXT:** independent review of the trusted default-branch recovery controller and authority isolation, followed by safe unattended full-run wakeup, reconciliation of genuinely uncertain network responses and real provider cost budgeting. Do not merge unreviewed state-writer code into protected main.
+
+17. **C-10 LIVE INVENTORY — BLOCKED AS DESIGNED:** GitHub run #40127588074 inspected immutable actual branch HEADs and found 12 permission grants on three unprotected historical branches, despite source-quality and 11 deterministic scanner tests passing. See `docs/c10-branch-authority.md` and blocker issue #8.
+18. **NEXT SEC-01 remediation:** independently review and quarantine those historical branch execution paths (or protect them with effective GitHub rulesets), then rescan the original refs. Move future state-writing authority into protected, reviewed code; only subsequently consider changes to protected main and mandatory security status checks. No independent authorization yet.
