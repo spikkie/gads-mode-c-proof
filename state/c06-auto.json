@@ -1,1 +1,1 @@
-{"deadline":0,"generation":0,"history":[],"p1":"PENDING","p1_attempt_limit":2,"p1_attempts":0,"p2":"PENDING","p3":"PENDING","run_id":"40092471386","schema":"gads.c06.auto.v1","source":"2c2f043550b00750583e2c35a84f9b47db3179e2","stage":"READY","units_limit":2,"units_used":0}
+{"deadline":1792843529,"generation":1,"history":["p1-crashed"],"p1":"LEASED","p1_attempt_limit":2,"p1_attempts":1,"p2":"PENDING","p3":"PENDING","run_id":"40092471386","schema":"gads.c06.auto.v1","source":"2c2f043550b00750583e2c35a84f9b47db3179e2","stage":"LEASED","units_limit":2,"units_used":0}
