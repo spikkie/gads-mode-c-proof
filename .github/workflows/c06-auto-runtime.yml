@@ -1,0 +1,96 @@
+name: C-06 H-00 automated synthetic workpackage chain
+on:
+  push:
+    branches:
+      - qualification/c06-h00-live-20261024
+permissions: {}
+jobs:
+  tests:
+    if: contains(github.event.head_commit.message, '[c06-auto]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: |
+          python3 scripts/qualify.py manifest --checkout .
+          python3 -m unittest tests.test_c06_auto -v
+  init:
+    needs: tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Persist queue and total synthetic work budget
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_auto init
+  crash:
+    needs: init
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Persist leased checkpoint, then deliberately crash
+        id: injected
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_auto crash
+      - name: Verify the worker process truly failed
+        env:
+          ACTUAL: ${{ steps.injected.outcome }}
+        run: test "$ACTUAL" = failure
+  recover:
+    needs: crash
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Recover first package from state, no operator action
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_auto recover
+  next_package:
+    needs: recover
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Complete P2 and deny P3 over cap
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_auto next
+  verify:
+    needs: next_package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Independently verify budget cap and persisted state
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c06_auto verify
