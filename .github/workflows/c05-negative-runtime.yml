@@ -1,0 +1,22 @@
+name: C-05 synthetic negative runtime qualification
+on:
+  push:
+    branches:
+      - qualification/c05-negative-runtime-20261024
+permissions:
+  contents: read
+jobs:
+  negative_runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout unprivileged qualification branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Validate full source manifest (fail closed)
+        run: python3 scripts/qualify.py manifest --checkout .
+      - name: Run hosted negative paths and real read-only protection checks
+        run: python3 -m scripts.negative_runtime
