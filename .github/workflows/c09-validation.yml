@@ -1,0 +1,25 @@
+name: C-09 read-only trigger security qualification
+on:
+  push:
+    branches:
+      - qualification/c09-trusted-trigger-20261024
+permissions: {}
+jobs:
+  security_contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify source manifest and admission negative tests
+        run: |
+          python3 scripts/qualify.py manifest --checkout .
+          python3 -m unittest tests.test_c09_gate -v
+      - name: Verify historical real GitHub source-run and terminal state via read-only API
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c09_gate smoke
