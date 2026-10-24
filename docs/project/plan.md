@@ -15,3 +15,6 @@
 
 11. **EVIDENCED:** C-07 cross-run dispatch from public synthetic source branch to pinned, already-trusted default-branch C-05 using `actions:write` in a separate token scope and durable single-use intent. Live runs #40093584738 and #40093613654 PASS; evidence in `docs/c07-cross-run-evidence.md`.
 12. **NEXT:** review a minimal H-00 recovery dispatcher on protected main and safely test terminated-*whole-run* recovery with durable outbox reconciliation, stale-owner fencing and provider metering; do not merge draft PRs without independent security and owner approval.
+
+13. **EVIDENCED:** C-08 persisted a synthetic lost-dispatch acknowledgement and ended an entire GitHub workflow with injected failure (run #40095804830). A separate manually initiated run (#40095926987) matched the genuine C-07->C-05 target via GitHub API, committed CONFIRMED_SUCCESS and passed idempotent verifier replay. See `docs/c08-recovery-evidence.md`.
+14. **NEXT:** independent review of the trusted default-branch recovery controller and authority isolation, followed by safe unattended full-run wakeup, reconciliation of genuinely uncertain network responses and real provider cost budgeting. Do not merge unreviewed state-writer code into protected main.

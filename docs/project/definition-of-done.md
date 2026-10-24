@@ -37,3 +37,15 @@
 - [ ] Independent security signoff of write-token scope and adversarial untrusted branch controls.
 
 C-07 PASS is an isolated public infrastructure proof, not adoption of Mode C in private repositories.
+
+## C-08 bounded recovery of an uncertain dispatch
+
+- [x] Actual full-workflow failure persists a verifiable UNKNOWN_ACK state on a separate Git-ref before termination.
+- [x] Different workflow run reads persistent state and reconciles one matching **real** earlier target C-05 run, with strict actor, SHA, workflow, source-intent and timestamp match.
+- [x] No-match, multiple matches, failed target and untrusted source are rejected in deterministic tests.
+- [x] Fresh verifier job and repeat verify confirm unchanged terminal Git ref and no duplicate dispatch.
+- [ ] Automatic recovery trigger after entire workflow run termination, using reviewed default-branch control plane.
+- [ ] Unexpected HTTP/network ack loss with full fail-closed real reconciliation, provider spend accounting and hostile-writer fencing.
+- [ ] Independent security review and owner signoff before merge/adoption.
+
+C-08 is an isolated public synthetic candidate only; **no private-repository authorization**.

@@ -1,0 +1,66 @@
+name: C-08 fail-closed terminated-run dispatch reconciliation
+on:
+  push:
+    branches:
+      - qualification/c08-reconcile-20261024
+permissions: {}
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: |
+          python3 scripts/qualify.py manifest --checkout .
+          python3 -m unittest tests.test_c08_recovery -v
+  seed:
+    needs: tests
+    if: contains(github.event.head_commit.message, '[c08-seed]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Store UNKNOWN_ACK and deliberately terminate complete run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c08_recovery seed
+  reconcile:
+    needs: tests
+    if: contains(github.event.head_commit.message, '[c08-reconcile]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Read real target run and reconcile unknown dispatch, no dispatch API call
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c08_recovery reconcile
+  verify:
+    needs: reconcile
+    if: contains(github.event.head_commit.message, '[c08-reconcile]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Independently verify terminal state and actual target, without writes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c08_recovery verify
