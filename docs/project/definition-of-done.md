@@ -20,7 +20,8 @@
 - [x] Version-bound unit security tests and source SHA256/E1 pass on latest replay candidate.
 - [x] Real wall-clock lease TTL tested on separate GitHub Actions runs: premature recovery denied, 15-second expiry then CAS takeover; state attempt budget fixed at one (see `docs/c06-evidence.md`).
 - [ ] Model/API cost budgets, overall workflow deadlines, exhaustive bounded-retry failure-path evidence under interruption.
-- [ ] Hostile stale-owner fencing, multiple queued workpackages and automatic next-package dispatch.
+- [x] Bounded synthetic multi-workpackage queue: P1 failure/recovery, P2 automatically started in next GitHub job, P3 denied at 2/2 synthetic units; durable ref verified and replay unchanged.
+- [ ] Fully unattended cross-workflow-run crash recovery, real provider/API cost caps, hostile-writer fencing, larger multi-package scheduling and fairness.
 - [ ] Independent security review and controller integration with second distinct consumer.
 
 **None of these public checks authorizes** protected `main` merges, private repository writes, other projects, or full Mode C activation. Candidate only, NOT ADOPTED.

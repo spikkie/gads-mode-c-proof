@@ -9,3 +9,6 @@
 
 7. **EVIDENCED:** Follow-up clock-based 15-second TTL and one allowed state recovery attempt on real GitHub runners. Verify exact live runs in `docs/c06-evidence.md`; deadline proof does not imply cost management.
 8. **NEXT:** bounded cost/deadline enforcement, stale-writer fencing beyond honest Git ref CAS, and unattended transition to the next workpackage. Independent review before merge/adoption.
+
+9. **EVIDENCED:** One GitHub Actions invocation autonomously recovers P1 across jobs, starts P2, denies P3 over a synthetic budget, verifies durable state, and repeats verifier without write. See `docs/c06-auto-evidence.md`, run #40092471386.
+10. **NEXT:** measure real Copilot/API usage rather than treating synthetic units as billed spend; prove time/event-driven restart across independent workflow runs with fail-closed credential boundaries; independent security review before protected-main integration.
