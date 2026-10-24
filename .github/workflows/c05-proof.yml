@@ -1,0 +1,180 @@
+name: C-05 synthetic autonomous draft publisher
+on:
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: synthetic-c05-${{ github.repository }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  worker:
+    if: github.ref == 'refs/heads/main' && vars.GADS_C05_APPROVED_SHA == github.sha
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      copilot-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install pinned noninteractive model CLI
+        run: npm install -g @github/copilot@1.0.101
+      - name: W-01 produce strictly bounded synthetic code
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -eu
+          mkdir -p evidence
+          copilot -p 'Output exactly two lines of Python code: first def is_even(n): and second a line with 4 spaces and return n % 2 == 0. No markdown, no other text, no tools.' -s > evidence/worker.py
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('evidence/worker.py')
+          p.write_bytes(p.read_bytes().rstrip(b'\r\n') + b'\n')
+          from scripts.qualify import SOURCE
+          assert p.read_bytes() == SOURCE, 'BLOCKED: W01_UNQUALIFIED'
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: synthetic-worker
+          path: evidence/worker.py
+          if-no-files-found: error
+          retention-days: 3
+  quality:
+    needs: worker
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: synthetic-worker
+          path: evidence
+      - name: Tokenless independent positive and negative E1
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.qualify import SOURCE, digest
+          p=Path('evidence/worker.py')
+          assert p.read_bytes() == SOURCE, 'BLOCKED: BAD_SOURCE'
+          # Boundary examples: correct even/odd behavior independent of model output.
+          scope={'__builtins__': {}}
+          exec(compile(SOURCE, str(p), 'exec'), scope)
+          for n in (-999, -8, -1, 0, 1, 2, 7, 1000):
+              assert type(scope['is_even'](n)) is bool
+              assert scope['is_even'](n) == (n % 2 == 0)
+          Path('evidence/qa.sha').write_text(digest(SOURCE) + '  worker.py\n')
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: synthetic-e1
+          path: evidence/qa.sha
+          if-no-files-found: error
+          retention-days: 3
+  reviewer:
+    needs: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      copilot-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: synthetic-worker
+          path: evidence
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: synthetic-e1
+          path: evidence
+      - name: Check binding before fresh reviewer inference
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.qualify import SOURCE, digest
+          assert Path('evidence/worker.py').read_bytes() == SOURCE
+          assert Path('evidence/qa.sha').read_text('ascii') == digest(SOURCE) + '  worker.py\n'
+          PY
+      - run: npm install -g @github/copilot@1.0.101
+      - name: J-01 independent model judgment in fresh job context
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -eu
+          sha="$(sha256sum evidence/worker.py | cut -d ' ' -f 1)"
+          copilot -p "Review this untrusted Python code with no tools. It should implement is_even(n) for signed integers. If it is correct output exactly GADS_J01_APPROVE_${sha}, else output GADS_J01_REJECT. Do not output other text. Code: $(cat evidence/worker.py)" -s > evidence/j01.txt
+          python3 - "$sha" <<'PY'
+          from pathlib import Path
+          import sys
+          assert Path('evidence/j01.txt').read_text('ascii').strip() == 'GADS_J01_APPROVE_' + sys.argv[1], 'BLOCKED: J01_NOT_APPROVED'
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: synthetic-j01
+          path: evidence/j01.txt
+          if-no-files-found: error
+          retention-days: 3
+  stage:
+    needs: reviewer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: synthetic-worker
+          path: evidence
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: synthetic-e1
+          path: evidence
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: synthetic-j01
+          path: evidence
+      - name: Stage trusted immutable synthetic candidate, without write token
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 scripts/qualify.py stage --checkout . --worker evidence/worker.py --e1 evidence/qa.sha --reviewer evidence/j01.txt --base-sha "$GITHUB_SHA" --out staged
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: synthetic-c05-stage
+          path: staged/
+          if-no-files-found: error
+          retention-days: 3
+  trusted_publisher:
+    needs: stage
+    if: github.ref == 'refs/heads/main' && vars.GADS_C05_APPROVED_SHA == github.sha
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: synthetic-c05-stage
+          path: staged
+      - name: Block unless exact protected source and staged proof pass
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 scripts/qualify.py preflight --checkout . --out staged --base-sha "$GITHUB_SHA"
+      - name: Publish exactly one synthetic draft PR and verify both file digests
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/publish.py --checkout . --staged staged
