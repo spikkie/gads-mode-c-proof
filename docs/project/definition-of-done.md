@@ -25,3 +25,15 @@
 - [ ] Independent security review and controller integration with second distinct consumer.
 
 **None of these public checks authorizes** protected `main` merges, private repository writes, other projects, or full Mode C activation. Candidate only, NOT ADOPTED.
+
+## C-07 bounded cross-run trigger
+
+- [x] Branch-only publisher code sends fixed-workflow dispatch to protected, SHA-approved C-05 on main, no private repository writes.
+- [x] Durable single-use intent ref created by dedicated `contents:write` job; dispatcher has only `actions:write` and read access.
+- [x] Independent actual GitHub `workflow_dispatch` run observed from `github-actions[bot]`; all C-05 jobs succeed; existing draft PR reused.
+- [x] Negative unit cases for duplicate intent, unprotected main, wrong source branch and rerun replay, subject to final-head GitHub E1.
+- [ ] Trusted H-00 cross-run recovery workflow reviewed and integrated into protected default branch.
+- [ ] Crash-window uncertain-dispatch reconciliation and true provider-spending/budget enforcement.
+- [ ] Independent security signoff of write-token scope and adversarial untrusted branch controls.
+
+C-07 PASS is an isolated public infrastructure proof, not adoption of Mode C in private repositories.

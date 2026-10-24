@@ -7,3 +7,5 @@ Public synthetic **qualification candidate v0.1.0**. The public C-05 autonomous 
 2026-10-24: Follow-up C-06 live TTL/deadline/one-attempt budget evidence added on isolated draft PR #4; live proof run #40091035825 PASS and terminal ref `3411cf9b588349670f9b8c5edcf0ceb37b8d2b1a`. No adoption, merge, or private-repo authorization.
 
 2026-10-24: C-06 automatic job-chain candidate now also verified in [#40092471386](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40092471386). Synthetic budget only, not vendor billing. Still **DRAFT / NOT MERGED / NOT ADOPTED**.
+
+2026-10-24: C-07 public synthetic cross-run workflow dispatch evidence complete (dispatcher run #40093584738, C-05 target #40093613654). Security review, protection against hostile untrusted branch code, and whole-run H-00 recovery still OPEN. Draft branch only, NO MERGE / NO ADOPTION.

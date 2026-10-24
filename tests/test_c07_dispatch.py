@@ -43,3 +43,41 @@ class TestC07(unittest.TestCase):
     def test_json_roundtrip(self):
         self.assertEqual(d.validate(__import__("json").loads(d.core.encode_state(self.state))),
                          self.state)
+
+    def test_second_workflow_attempt_blocked_before_network(self):
+        import os
+        from unittest.mock import patch
+        with patch.dict(os.environ, {"GITHUB_RUN_ATTEMPT":"2"}):
+            with self.assertRaisesRegex(Blocked,"C07_DISPATCH_REPLAY_DENIED"):
+                d.dispatch(object())
+
+    def test_prepare_duplicate_intent_denied_without_mutation(self):
+        import os
+        from unittest.mock import patch
+        with patch.dict(os.environ, {"GITHUB_RUN_ID":"400001"}):
+            with patch.object(d,"preflight",return_value="a"*40):
+                with patch.object(d,"read_intent",return_value=("b"*40,self.state)):
+                    with patch.object(d.core,"build_commit",side_effect=AssertionError("unexpected mutation")):
+                        with self.assertRaisesRegex(Blocked,"C07_EXISTING_INTENT_DENY_DUPLICATE"):
+                            d.prepare(object())
+
+    def test_protected_main_mandatory(self):
+        import os
+        from unittest.mock import patch
+        class Fake:
+            def call(self,method,path):
+                assert method=="GET" and path=="/branches/main"
+                return {"protected":False,"commit":{"sha":d.TARGET_SHA}}
+        with patch.dict(os.environ, {"GITHUB_REPOSITORY":d.REPO,
+                "GITHUB_REF":"refs/heads/"+d.SOURCE_BRANCH,
+                "GITHUB_SHA":"a"*40}):
+            with self.assertRaisesRegex(Blocked,"C07_MAIN_PROTECTION_OR_SOURCE_CHANGED"):
+                d.preflight(Fake())
+
+    def test_source_scope_ref_denied_before_network(self):
+        import os
+        from unittest.mock import patch
+        with patch.dict(os.environ, {"GITHUB_REPOSITORY":d.REPO,
+                "GITHUB_REF":"refs/heads/main","GITHUB_SHA":"a"*40}):
+            with self.assertRaisesRegex(Blocked,"C07_WRONG_SOURCE_BRANCH"):
+                d.preflight(object())
