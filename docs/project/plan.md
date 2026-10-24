@@ -12,3 +12,6 @@
 
 9. **EVIDENCED:** One GitHub Actions invocation autonomously recovers P1 across jobs, starts P2, denies P3 over a synthetic budget, verifies durable state, and repeats verifier without write. See `docs/c06-auto-evidence.md`, run #40092471386.
 10. **NEXT:** measure real Copilot/API usage rather than treating synthetic units as billed spend; prove time/event-driven restart across independent workflow runs with fail-closed credential boundaries; independent security review before protected-main integration.
+
+11. **EVIDENCED:** C-07 cross-run dispatch from public synthetic source branch to pinned, already-trusted default-branch C-05 using `actions:write` in a separate token scope and durable single-use intent. Live runs #40093584738 and #40093613654 PASS; evidence in `docs/c07-cross-run-evidence.md`.
+12. **NEXT:** review a minimal H-00 recovery dispatcher on protected main and safely test terminated-*whole-run* recovery with durable outbox reconciliation, stale-owner fencing and provider metering; do not merge draft PRs without independent security and owner approval.
