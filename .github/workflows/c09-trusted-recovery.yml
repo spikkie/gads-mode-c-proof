@@ -1,0 +1,32 @@
+name: C-09 protected-main read-only H-00 recovery admission
+on:
+  workflow_run:
+    workflows:
+      - C-08 fail-closed terminated-run dispatch reconciliation
+    types: [completed]
+    branches:
+      - qualification/c08-reconcile-20261024
+permissions: {}
+concurrency:
+  group: c09-admission-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+jobs:
+  admit:
+    if: github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout only reviewed default-branch code, never the triggering branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Validate immutable source manifest
+        run: python3 scripts/qualify.py manifest --checkout .
+      - name: Check trustworthy GitHub run identity and reconcile state read-only
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m scripts.c09_gate event
