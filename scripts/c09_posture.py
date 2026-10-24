@@ -16,8 +16,12 @@ LISTENER=".github/workflows/c09-trusted-recovery.yml"
 
 def assess(ruleset, files):
     findings=[]
-    if ruleset.get("enforcement")!="active" or ruleset.get("bypass_actors")!=[]:
-        findings.append("SEC-UNSAFE-RULESET")
+    if ruleset.get("enforcement")!="active":
+        findings.append("SEC-RULESET-NOT-ACTIVE")
+    if "bypass_actors" not in ruleset:
+        findings.append("SEC-BYPASS-DATA-UNAVAILABLE")
+    elif ruleset["bypass_actors"] != []:
+        findings.append("SEC-BYPASS-ACTORS-PRESENT")
     rules={r["type"]:(r.get("parameters") or {}) for r in ruleset.get("rules",[]) if isinstance(r,dict) and "type" in r}
     if not {"deletion","non_fast_forward","pull_request","required_status_checks"}.issubset(rules):
         findings.append("SEC-INCOMPLETE-BRANCH-PROTECTION")

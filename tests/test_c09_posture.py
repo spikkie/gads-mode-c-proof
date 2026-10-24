@@ -41,3 +41,10 @@ class PostureTests(unittest.TestCase):
     def test_missing_workflow_denied(self):
         r,f=sample();f.pop(p.WRITERS[0])
         self.assertIn("SEC-MISSING:"+p.WRITERS[0],p.assess(r,f))
+
+    def test_missing_bypass_data_denied_as_uncertain(self):
+        r,f=sample();r.pop("bypass_actors")
+        self.assertIn("SEC-BYPASS-DATA-UNAVAILABLE",p.assess(r,f))
+    def test_explicit_bypass_denied(self):
+        r,f=sample();r["bypass_actors"]=[{"actor_id":1}]
+        self.assertIn("SEC-BYPASS-ACTORS-PRESENT",p.assess(r,f))
