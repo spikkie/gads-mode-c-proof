@@ -62,7 +62,7 @@ def check_return(packet, result):
         raise runtime.ReviewBlocked("REVIEW_SOURCE_MISMATCH")
     if result.get("reviewer_identity") != packet.get("reviewer_identity"):
         raise runtime.ReviewBlocked("REVIEWER_IDENTITY_MISMATCH")
-    if result.get("decision") not in DECISIONS:
+    if not isinstance(result.get("decision"), str) or result["decision"] not in DECISIONS:
         raise runtime.ReviewBlocked("INVALID_REVIEW_DECISION")
     reported = result.get("batch_digests")
     expected = [b["digest"] for b in packet.get("batches", [])]
