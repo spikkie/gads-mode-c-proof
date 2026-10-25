@@ -7,7 +7,7 @@
 - [x] 409/422 CAS conflicts fail closed, without automatic retry.
 - [x] Correlated target attestation contract independently requests GitHub run.
 - [x] Security unit tests simulate write conflict, forged target and stale owner.
-- [ ] Final SHA in hosted E1: manifest, all tests and historical GET probe PASS.
+- [x] Hosted E1: manifest, all tests and historical GET-only probe PASS on repaired gateway source SHA; documentation-head CI must be reconfirmed.
 - [ ] Unique run-name correlation proven with a new reviewed target workflow.
 - [ ] Real approved protected-main writer uses durable GitHub CAS (NOT deployed).
 - [ ] Real external-cost provider budgets and uncertain-dispatch outbox.

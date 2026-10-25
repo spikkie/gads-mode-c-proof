@@ -71,3 +71,9 @@ contract. No claim of actual correlated live target attestation is made.
 
 **No backward compatibility** with temporary C-06..C-10 modules, no merge
 to protected main, no private repo writes, no billing or production calls.
+
+## Hosted GitHub E1 evidence — 2026-10-25
+
+[Run #40186008343](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40186008343) **PASS** on repaired gateway source SHA `d33e13f56619c5e12facf7b42557566cd931534d`: `MANIFEST_PASS files=25`, 57/57 deterministic E1 tests and real **GET-only** historical GitHub provenance readback `GADS_GATEWAY_LIVE_READONLY_PASS` for protected main and C05 run #40093613654. Initial #40185898162 failed a corrupted-blob exception-classification test, fixed with preserved `STATE_BLOB_MISMATCH` and no softened validation.
+
+The source E1 is separate from **real write-path qualification**: the CAS transitions were exercised with an injectable simulated server, not production writes. A separate final documentation HEAD CI is mandatory. Full Mode C and SEC-01/SEC-02 still OPEN.

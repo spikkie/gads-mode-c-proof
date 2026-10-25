@@ -14,3 +14,10 @@ succeeded with 26/26 tests; do not treat that as v0.2.1 acceptance.
 Security issue #8, historical unprotected branch writers, independent human
 approval/strict checks, real billable Copilot ceilings and unattended cross-run
 recovery remain OPEN. No merge, private writes or production use.
+
+## Live v0.2.1 validation — 2026-10-25
+
+- [Read-only gateway CI #40186008343](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40186008343), source SHA `d33e13f56619c5e12facf7b42557566cd931534d`: **SUCCESS**, 57/57 E1 tests, complete 25-file manifest and `GADS_GATEWAY_LIVE_READONLY_PASS` against protected main SHA `43cb1e6924d208288350d70b7b273f7cd3def0c4` plus prior target run `40093613654`.
+- First run #40185898162 failed one error-classification regression for corrupt Git blob; repaired without weakening the integrity check. Final successful source is the repaired SHA above.
+- No real state-ref write, no privileged token, no model spending and no new dispatch. The correlated target-run-name assumption remains pending independent real-world verification.
+- Final documented PR-head requires fresh CI after this report commit.
