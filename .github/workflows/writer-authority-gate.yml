@@ -1,0 +1,27 @@
+name: GADS writer authority — fail-closed live preflight
+on:
+  push:
+    branches:
+      - development/gads-writer-authority-v0.2.3-20261025
+permissions: {}
+jobs:
+  writer_authorization:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
+    steps:
+      - name: Checkout unprivileged exact branch source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify source manifest
+        run: python3 -m gads.manifest verify --root .
+      - name: Run authorization negative tests
+        run: python3 -m unittest tests.test_writer_authority -v
+      - name: Check current GitHub authority; prohibit grant while controls are absent
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 -m gads.writer_authority_probe
