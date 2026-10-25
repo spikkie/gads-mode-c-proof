@@ -61,3 +61,16 @@ execution trust, OS isolation, production signature, or check authorization.
 - [ ] Proven OS guest isolation/egress, independent J-01 code review,
       real PR head review and authenticated trusted status.
 - [ ] Owner approval for protected-main merge/writer adoption.
+
+## SEC-02.8 v0.2.11 benchmark
+- [x] Twenty immutable cases, exactly 8 safe / 8 unsafe / 4 adversarial.
+- [x] Ground-truth decisions specified OUTSIDE every model prompt.
+- [x] Test oracle and deterministic offline FP/FN/error/coverage metrics.
+- [x] Separate heuristic factual-directionality/contradiction signals.
+- [x] Explicit Mac-only local model execution, five-case bounded batches,
+      one model per run; unsafe outputs never become trusted J-01 checks.
+- [ ] Exact-head v0.2.11 GitHub push and PR E1 and deliberately BLOCKED gate.
+- [ ] Operator executes four batches for each of three models on Mac.
+- [ ] Independently audit semantic oracle and findings, repeat tests/blindness.
+- [ ] Actually provision/test isolated VM and authenticated J-01 issuer.
+- [ ] Approved source main + state repo writer; full Mode C DoD.

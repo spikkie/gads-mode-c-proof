@@ -37,3 +37,13 @@ qwen3.5:9b 6.6 GB installed; Gemma running ~16 GB MLX/100% GPU,
 16384 context reported. New local GET probe and deliberate synthetic
 model smoketest code; NO actual model call by CI/ChatGPT. No VM backend,
 no trusted source/status, no owner-approved merge. Final-head E1 pending.
+
+## SEC-02.8 v0.2.11 (2026-10-25)
+Three actual operator-provided Mac smoke results for one common negative
+fixture: all decision-level REQUEST_CHANGES; Gemma found permission +
+prompt injection, GPT-OSS permission without injection classification,
+Qwen prompt injection but wrongly claimed writer gate DISABLED. These are
+single untrusted model observations, not accuracy ranking evidence.
+New fixed balanced 20-case benchmark, model-blind inputs and offline
+heuristic scoring. Local 20-case evaluations NOT run; no Mac host access,
+no trusted status, no source-main merge. Candidate head CI pending.

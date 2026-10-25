@@ -39,3 +39,13 @@
   do not claim guest-local GPU equivalence or expose Mac Ollama to LAN.
 - D-022: Future libkrun/krunkit GPU-VM path is experimentally possible,
   but requires distinct memory, network, performance and security gates.
+
+- D-023: J-01 candidate choice requires a balanced blind benchmark,
+  independent expected decisions, manual factual review and repeated
+  stable performance, not a single negative smoke.
+- D-024: Source-authored labels and regex scoring are separated from
+  LLM prompt but NOT independently adjudicated; this limit is explicit.
+- D-025: Three known local model digests pinned; fail-closed on drift.
+  Mac runs explicit, one model/five cases at a time; no auto promotion.
+- D-026: Publish only synthetic development code. Scores cannot issue
+  trusted status, merge, authorize writers or attest isolated J-01.
