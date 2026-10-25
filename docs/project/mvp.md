@@ -25,3 +25,9 @@ Prepare complete immutable synthetic review inputs via anonymous GitHub
 GET on Mac; transfer single packet into separately authorized offline
 Linux guest for local Ollama. Both package and model result remain
 untrusted and do not authorize GitHub changes.
+
+## SEC-02.7 macOS model smoke MVP
+Real operator baseline: macOS arm64, 24 GiB, installed gemma4:12b and
+qwen3.5:9b; Gemma active MLX 100% GPU, ~16 GB loaded and 16384 context
+at CLI observation. New read-only Ollama model probe and opt-in *synthetic*
+negative-control inference; results are UNTRUSTED dev-only observations.

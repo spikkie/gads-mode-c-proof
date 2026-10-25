@@ -1,5 +1,13 @@
 # Changelog — canonical GADS
 
+## v0.2.10 — SEC-02.7 Mac model development candidate (2026-10-25)
+- Qualify observed 24 GiB macOS/ARM64 MLX Gemma 4 12B and alternate Qwen 3.5 9B.
+- Added local-only GET inventory with full model digest and loaded-state report.
+- Added opt-in one-model synthetic security negative-control and 0600 evidence.
+- Rejected unsafe model approval as development-control failure, never trusted status.
+- Kept GPU-in-VM acceleration a separate unproven resource/isolation gate.
+- No actual Mac inference in hosted E1, source-main merge or writer token.
+
 ## v0.2.9 — SEC-02.6 offline J-01 candidate (2026-10-25)
 - Added Mac anonymous public-GET exact-head review package export.
 - Added independent offline guest-local Ollama review path without GitHub access.

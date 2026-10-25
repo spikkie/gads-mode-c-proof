@@ -48,3 +48,16 @@ execution trust, OS isolation, production signature, or check authorization.
 - [ ] Real guest-only local Ollama and no-host-network/secret proof.
 - [ ] Trusted verifier authenticating independently fetched GitHub source.
 - [ ] Actual independent J-01 judgment and owner-approved protected main.
+
+## SEC-02.7 v0.2.10 Mac MLX development gate
+- [x] Actual Mac inventory/RAM/Ollama model details supplied by operator.
+- [x] Local GET-only version/tags/ps probe and full model identity checks.
+- [x] Explicit opt-in synthetic one-model inference with 0600 output.
+- [x] Adversarial tests for bad model JSON, toolcalls, unsafe approvals,
+      secret/proxy env and inadmissible output overwrite.
+- [ ] v0.2.10 final-head GitHub E1 and writer-authority BLOCKED evidence.
+- [ ] Actual probe and opt-in model run on operator's Mac.
+- [ ] Measured macOS memory pressure and model latency under workload.
+- [ ] Proven OS guest isolation/egress, independent J-01 code review,
+      real PR head review and authenticated trusted status.
+- [ ] Owner approval for protected-main merge/writer adoption.

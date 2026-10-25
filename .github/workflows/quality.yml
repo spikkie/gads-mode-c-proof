@@ -12,6 +12,7 @@ on:
       - development/gads-sec02-4-bundle-v0.2.7-20261025
       - development/gads-sec02-5-macos-v0.2.8-20261025
       - development/gads-sec02-6-offline-v0.2.9-20261025
+      - development/gads-sec02-7-mac-ollama-v0.2.10-20261025
   pull_request:
 permissions: {}
 jobs:
