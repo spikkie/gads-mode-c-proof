@@ -1,7 +1,7 @@
 {
   "schema": "gads.cas-proof.v1",
   "epoch": "2026-10-25",
-  "generation": 0,
-  "owner": "bootstrap",
-  "winner": null
+  "generation": 1,
+  "owner": "writer-a",
+  "winner": "writer-a"
 }
