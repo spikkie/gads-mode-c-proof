@@ -22,3 +22,9 @@ durable outbox/correlation, model spend ceilings, H-00 recovery, E1-E4.
 
 GitLab Self-Managed `gitlab.spikkies-it.nl` remains a future provider
 adapter, not a second duplicated H-00 implementation.
+
+## SEC-02.5 Mac execution readiness
+A. [candidate] Mac Python-only read-only CLI inventory.
+B. [candidate] Mac->isolated Linux guest, no automatic shared home or host loopback; real VM qualification pending.
+C. [candidate] Mac Ollama remains developer-only; for trusted guest review model must be guest local or later separately approved secure model relay.
+D. [pending] Exact SHA CI, true independent reviewer, sandbox evidence, safe issuer and human-only main integration.

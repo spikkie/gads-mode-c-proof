@@ -19,3 +19,6 @@ OPEN: live isolated sandbox; fresh independent actual model execution;
 authentic trusted issuer/check, human owner approval, separate source/state
 writer, live exact-beforeOid CAS, full Mode C.
 **NO MERGE / NO PRIVATE WRITES / NO TOKEN / NOT ADOPTED.**
+
+## SEC-02.5 v0.2.8 candidate — macOS correction
+Source branch `development/gads-sec02-5-macos-v0.2.8-20261025` stacked on v0.2.7 SHA `652dbef9d0128ad198873853ddb2aac20d538acc`. Public synthetic only. Mac read-only preflight and stricter isolated guest policy. No actual Mac inspection, VM startup, guest egress probe, model run, independent J-01 or accepted release. Exact-head CI pending.

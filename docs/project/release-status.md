@@ -1,9 +1,4 @@
-# GADS v0.2.7 — release and adoption status
+# GADS v0.2.8 SEC-02.5 — CANDIDATE
 
-**CANDIDATE ONLY / NOT RELEASED / NOT MERGED / NOT ADOPTED.**
-
-A sandbox inspection contract is not deployed isolation. An untrusted
-review packet is not an independent J-01 run. Synthetic HMAC fixtures and
-local SQLite replay test are not a trusted GitHub App check issuer.
-No real Ollama model run, protected-main merge or source/private write.
-Writer-authority gate must stay BLOCKED.
+**NOT RELEASED / NOT MERGED / NOT ADOPTED / MODE C BLOCKED.**
+macOS inventory and guest policy only; no host access, local model run, independent J-01 attestation, GitHub issuer/App credentials, source/state writer or owner-approved protected main merge.

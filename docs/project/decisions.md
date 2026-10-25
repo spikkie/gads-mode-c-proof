@@ -21,3 +21,7 @@
   not deployed issuer or proof of independent J-01. No secret shared with AI.
 - D-013: GitLab Self-Managed adapter is future scope with same H-00 policy,
   separate provider-specific credential issuer.
+
+- D-014: This project's development workstation is Mac; Linux host assumptions are superseded.
+- D-015: No Mac home/work mounts, implicit host loopback or Mac Ollama exposure into untrusted review VM. Guest-local model is baseline for trusted experiment.
+- D-016: Read-only Mac model observations are untrusted; any future trusted status needs separate issuer and explicit human gate.

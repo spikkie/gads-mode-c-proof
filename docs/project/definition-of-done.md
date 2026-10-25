@@ -28,3 +28,12 @@
 **NOT RELEASED / NOT MERGED / NOT ADOPTED / WRITER BLOCKED.**
 A passing synthetic HMAC or normalized Podman metadata is not independent
 execution trust, OS isolation, production signature, or check authorization.
+
+## SEC-02.5 v0.2.8
+- [x] Model developer host as macOS, not Linux.
+- [x] Non-mutating Mac inventory and deterministic fail-closed guest security checks.
+- [ ] Exact-head GitHub E1 + expected BLOCKED writer-gate.
+- [ ] Actual operator Mac inventory verified (with no secret or private paths).
+- [ ] Independently verified OS guest isolation: host mounts, host loopback, external egress and guest Ollama.
+- [ ] Real independent SHA-bound J-01 model review and authenticated evidence.
+- [ ] Trusted issuer, explicit human merge approval and Mode C security exit.
