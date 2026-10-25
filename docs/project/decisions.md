@@ -1,8 +1,13 @@
-# Decisions
+# Architecture decisions
 
-- D1: Synthetic-only public materials; never mirror any private repository.
-- D2: GitHub Free protected public `main` is a mandatory server-side gate.
-- D3: One reviewed exact-SHA approval variable gates model and writer jobs; fail closed by default.
-- D4: Publisher may create only a draft PR into `main` with two file changes; no merge/approval APIs.
-- D5: One successful public proof is not permission to publish into a private repository.
-- D6: Additional architecture/prototypes must be justified by an observed C-05 failure.
+- **D-001:** No backward compatibility for unaccepted C05–C10 experimental code.
+- **D-002:** H-00 transitions are pure; external state CAS belongs to a later
+  separately approved trusted gateway.
+- **D-003:** Uncertain effects are sticky `UNKNOWN`; never re-dispatch merely
+  because an API response was lost or a lease timed out.
+- **D-004:** Reserve synthetic budget before a potential call; never claim
+  real billable-cost enforcement without independent provider metering.
+- **D-005:** Immutable source SHA and correlation are mandatory; event input
+  must come from an authenticated trusted gateway, not arbitrary JSON.
+- **D-006:** No write-capable GitHub token in branch CI; historic evidence is
+  preserved by references to commits and workflows, not executable adapters.
