@@ -1,16 +1,18 @@
-# Plan — canonical H-00, no backward compatibility
+# GADS H-00 roadmap — canonical, no legacy compatibility
 
-1. [EVIDENCED v0.2.0] Pure H-00 state machine and read-only E1.
-2. [CANDIDATE v0.2.1] Exact-policy trusted GitHub gateway: source readback,
-   non-force CAS state writes, independent run-metadata attestation.
-3. Qualify all adversarial gateway tests and historical live GET-only smoke.
-4. Independently security-review GitHub auth boundary, untrusted workflows,
-   ref permission granularity, and run-name correlation assumptions.
-5. Close security issue #8 for historical branch writers and require human
-   approval plus strict CI.
-6. Only after owner and independent authorization, install minimal trusted
-   writer from reviewed protected main and verify CAS at real GitHub refs.
-7. Implement durable outbox, actual Copilot request budgets, fresh unattended
-   cross-run failure recovery, and independent adversarial certification.
+1. Clean H-00 baseline: complete (candidate E1).
+2. Gateway adapter and read-only source provenance: candidate E1 complete.
+3. Security-review REST ref updates: discovered fast-forward vs CAS distinction;
+   replace with explicit GraphQL `beforeOid` and adversarial tests.
+4. Public synthetic Git race proof: writer A observed; competing writer B
+   produced a generic unknown error, not proof of GraphQL atomic comparison.
+5. Obtain independent security approval and owner-controlled minimal trusted
+   gateway/branch protection; no code from unprotected source may write.
+6. Isolated **real** GraphQL `beforeOid` CAS test, conflict and timeout:
+   pending approval, not delegated to read-only CI.
+7. Durable outbox + authenticated target run correlation + actual model quota;
+   no blind retries, no simulated budget represented as real billing.
+8. Native unattended full-run crash recovery, independent adversarial QA,
+   owner acceptance and only then adoption.
 
-No deprecated C05..C10 compatibility code, unreviewed merges, or private repos.
+Never merge experimental stacked PRs automatically or reintroduce wrappers.
