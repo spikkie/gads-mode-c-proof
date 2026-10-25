@@ -214,7 +214,7 @@ class AttestationTests(unittest.TestCase):
     def test_changed_pr_after_model(self):
         api = API()
         def mutate(payload):
-            api.files[0]["patch"] = "+evil"
+            api.files[0]["patch"] = "@@ -1 +1 @@\n-old\n+evil"
             return model()(payload)
         with self.assertRaisesRegex(j.ReviewBlocked, "CHANGED_AFTER"):
             j.review(api, mutate, 13, HEAD, "gemma4:12b", BASE, 123)
