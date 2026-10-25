@@ -49,3 +49,8 @@ compromise risk and the missing required PR-check event provenance.
 New clean development branch removes that workflow, adds pull-only
 credentialless local J-01 observations with explicit non-authority.
 Final-head CI pending. No real Ollama review, merge or approved runner.
+
+Additional read-only live PR analysis: PR #15 is ~33.9 KB, greater than
+previous single-model 24 KB cap. Deterministic complete-file chunking now
+supports up to 64 KiB input and <=8 x 16 KiB batches; no model actually
+ran during these E1 tests. Final-head revalidation pending.

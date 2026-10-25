@@ -4,6 +4,7 @@
 - Reject public GitHub self-hosted runner due to trust-boundary exposure.
 - Correct workflow_dispatch/required PR-status design assumption.
 - Add credentialless pull-only local reviewer, tests and threat model.
+- Bound complete-file batch coverage for PRs exceeding single-context limits.
 - No trusted model review, protected-main merge, release or writer grant.
 
 ## 0.2.4 SEC-02.1 candidate — 2026-10-25

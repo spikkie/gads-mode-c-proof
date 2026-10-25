@@ -47,3 +47,8 @@ not evidence of a running J-01. Source and private repositories unchanged.
 - [ ] Trusted exact-head check issuer, owner approval and protected-main
       deployment/merge independently qualified.
 NOT RELEASED. Do not treat a passing local mock as trust proof.
+
+- [x] Cover review inputs exceeding one model context with bounded
+      deterministic batches and no silently omitted files (mock tests).
+- [ ] Demonstrate real full-review coverage and cross-file reasoning
+      with a sandboxed local model; no trusted status without proof.

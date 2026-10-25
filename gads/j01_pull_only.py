@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 from gads import j01_runtime as runtime
+from gads import j01_batches as batching
 
 SCHEMA = "gads.j01-local-observation.v1"
 UNSAFE_ENV = (
@@ -28,17 +29,38 @@ def check_environment(environ):
 
 def observe(get, model_call, *, pr, expected_head, model):
     """One model invocation, GitHub GET only, no trust-emitting side effect."""
-    before, digest = runtime.snapshot(get, pr, expected_head)
-    output = runtime.infer(model_call, model, before)
-    after, after_digest = runtime.snapshot(get, pr, expected_head)
+    before, digest = runtime.snapshot(get, pr, expected_head,
+                                      max_bytes=batching.MAX_TOTAL_BYTES)
+    batches = batching.partition(before)
+    decisions = []
+    for batch in batches:
+        verdict = runtime.infer(model_call, model, batch)
+        decisions.append({
+            "batch_index": batch["batch_index"],
+            "sha256": batching.batch_digest(batch),
+            "decision": verdict["decision"],
+            "findings": verdict["findings"]
+        })
+    after, after_digest = runtime.snapshot(get, pr, expected_head,
+                                          max_bytes=batching.MAX_TOTAL_BYTES)
     if before != after or digest != after_digest:
         raise runtime.ReviewBlocked("PR_CHANGED_DURING_LOCAL_INFERENCE")
+    if len(decisions) != len(batches):
+        raise runtime.ReviewBlocked("INCOMPLETE_MODEL_COVERAGE")
+    approved = all(x["decision"] == "APPROVE" for x in decisions)
+    aggregated = [
+        f"batch {x['batch_index']}/{len(decisions)}: {finding}"
+        for x in decisions for finding in x["findings"]
+    ]
     return {
         "schema": SCHEMA,
         "reviewer": "J-01",
         "trust_level": "UNTRUSTED_LOCAL_OBSERVATION",
-        "decision": output["decision"],
-        "findings": output["findings"],
+        "decision": "APPROVE" if approved else "REQUEST_CHANGES",
+        "findings": aggregated,
+        "review_batches": decisions,
+        "reviewed_file_count": len(before["files"]),
+        "review_batch_count": len(batches),
         "pr_number": pr,
         "reviewed_head": expected_head,
         "base_head": before["base_head"],

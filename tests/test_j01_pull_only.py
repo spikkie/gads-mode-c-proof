@@ -66,6 +66,63 @@ class BoundaryTests(unittest.TestCase):
             main_sha=BASE, trusted_workflow_id=None),
             ["J01_EVIDENCE_ABSENT"])
 
+    def test_multiple_batches_cover_every_file(self):
+        api = API()
+        api.files = [dict(filename="part-" + str(i) + ".txt",
+                          status="modified",
+                          patch="@@ -1 +1 @@\\n-old\\n+" + ("x" * 1000),
+                          additions=1, deletions=1, changes=2)
+                     for i in range(18)]
+        calls = []
+        def spy(request):
+            calls.append(request)
+            return model(request)
+        result = p.observe(api, spy, pr=14, expected_head=HEAD,
+                           model="gemma4:12b")
+        self.assertGreater(result["review_batch_count"], 1)
+        self.assertEqual(result["review_batch_count"], len(calls))
+        self.assertEqual(result["reviewed_file_count"], 18)
+        self.assertEqual(len(result["review_batches"]), len(calls))
+        self.assertTrue(all(len(x["sha256"]) == 64 for x in result["review_batches"]))
+        self.assertEqual(result["decision"], "APPROVE")
+        self.assertFalse(result["writer_authorized"])
+
+    def test_one_negative_batch_denies_entire_review(self):
+        api = API()
+        api.files = [dict(filename="f" + str(i) + ".py",
+                          status="modified",
+                          patch="@@ -1 +1 @@\\n-old\\n+" + ("x" * 1000),
+                          additions=1, deletions=1, changes=2)
+                     for i in range(18)]
+        n = [0]
+        def mixed(request):
+            n[0] += 1
+            if n[0] == 2:
+                return {"done": True, "model": "gemma4:12b",
+                        "message": {"role": "assistant",
+                                    "content": '{"decision":"REQUEST_CHANGES","findings":["unsafe change"]}'}}
+            return model(request)
+        got = p.observe(api, mixed, pr=14, expected_head=HEAD,
+                        model="gemma4:12b")
+        self.assertGreater(n[0], 1)
+        self.assertEqual(got["decision"], "REQUEST_CHANGES")
+        self.assertTrue(any("unsafe change" in x for x in got["findings"]))
+
+    def test_unknown_result_in_any_batch_fails_closed(self):
+        api = API()
+        api.files = [dict(filename="f" + str(i) + ".py",
+                          status="modified",
+                          patch="@@ -1 +1 @@\\n-old\\n+" + ("x" * 1000),
+                          additions=1, deletions=1, changes=2)
+                     for i in range(18)]
+        n = [0]
+        def broken(request):
+            n[0] += 1
+            return {} if n[0] == 2 else model(request)
+        with self.assertRaisesRegex(r.ReviewBlocked, "INFERENCE"):
+            p.observe(api, broken, pr=14, expected_head=HEAD,
+                      model="gemma4:12b")
+
     def test_wrong_sha_fails_closed(self):
         with self.assertRaisesRegex(r.ReviewBlocked, "HEAD"):
             p.observe(API(), model, pr=14, expected_head="c" * 40,

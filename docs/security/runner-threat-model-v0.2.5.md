@@ -66,3 +66,17 @@ public GET and local Ollama, enforced by network policy (not merely Python).
 No GitHub Pro, no private repo, no trusted GitHub publisher, no real model
 execution, no backward-compatible C05-C10 code, no automatic merge.
 **SEC-02.2 STATUS: DESIGN MITIGATION ONLY / TRUST NOT PROVEN.**
+
+## Complete-diff budget and model context
+Live public PR #15 was read with GitHub GET: 18 changed files, approximately
+33,888 serialized characters. The original 24 KB single-prompt limit
+correctly denied that review. This candidate now uses an explicit total
+64 KiB limit, deterministic complete-file batches <=16 KB and <=8 calls.
+Every batch must return a valid decision. Final APPROVE requires all
+batches APPROVE; any error blocks, any REQUEST_CHANGES denies. Exact source
+SHA/base/diff revalidation follows inference. Digests and batch coverage are
+recorded in a non-authoritative local observation.
+
+Batchwise analysis is NOT proof of holistic cross-file understanding;
+model context and invocation costs remain to be empirically qualified.
+No partial or truncated review can issue a trusted GitHub status.
