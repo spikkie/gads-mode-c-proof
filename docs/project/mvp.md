@@ -20,3 +20,7 @@ provider calls remain out of scope; trusted deployment pending approval.
 Public GitHub runner registration is excluded. A credentialless local
 pull-only J-01 process may produce *only* an untrusted review observation.
 Source/merge/writer trust remains behind independent approval.
+
+## 0.2.6 SEC-02.3 concurrent development
+Sandbox specification, first-party static audit, and integrity-only
+local observation verification. No independent runtime or trusted issuer.

@@ -1,6 +1,6 @@
 # GADS - canonical H-00, GitHub Free synthetic qualification
 
-**v0.2.5 SEC-02.2 development candidate - NOT ADOPTED**
+**v0.2.6 SEC-02.3 development candidate - NOT ADOPTED**
 
 One canonical deterministic H-00 runtime in `gads/`, no backwards
 compatibility for C05-C10 experimental runners. Historical run evidence
@@ -50,3 +50,10 @@ REMOVED from the clean candidate. Do not register an Actions runner.
 to generate an untrusted, non-authorizing observation; no tokens,
 writer rights, required checks or protected main deployment.
 See `docs/security/runner-threat-model-v0.2.5.md`.
+
+## SEC-02.3 — three workstreams in one candidate
+`gads/j01_sec023.py` validates local untrusted review consistency
+against an independently acquired exact-head diff plus every batch.
+Its output **never** upgrades a model verdict to a trusted J-01 status.
+`docs/security/sandbox-contract-v0.2.6.json` is a design, not a
+host firewall or deployed VM. See docs/security/sec02-3-parallel-review-v0.2.6.md.

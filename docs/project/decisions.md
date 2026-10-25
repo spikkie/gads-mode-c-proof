@@ -34,3 +34,10 @@
   model APPROVE is never owner release or writer authorization.
 - D-017: Independently verified sandbox, authenticated trusted publisher
   and exact-PR-head required checks are separate open gates.
+
+- D-018: Parallelize sandbox spec, source audit and verification-contract
+  development, but retain sequential trusted deployment and owner gates.
+- D-019: Verified local J-01 observation remains untrusted, even if
+  model APPROVE and hashes match; separate audited issuer required.
+- D-020: Python URL/proxy restrictions do not establish OS-enforced
+  egress, identity, secret or filesystem isolation.
