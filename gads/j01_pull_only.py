@@ -24,6 +24,14 @@ def check_environment(environ):
         raise runtime.ReviewBlocked("CREDENTIALS_PRESENT_IN_REVIEWER_ENV")
     if environ.get("GITHUB_ACTIONS"):
         raise runtime.ReviewBlocked("GITHUB_ACTIONS_RUNNER_NOT_ALLOWED")
+    # Process preflight only; OS-enforced isolation still mandatory.
+    if any(key.upper().endswith("_PROXY") for key in environ):
+        raise runtime.ReviewBlocked("UNTRUSTED_PROXY_ENVIRONMENT")
+    if any(key in environ for key in ("PYTHONPATH", "PYTHONSTARTUP",
+                                      "PYTHONINSPECT", "SSL_CERT_FILE",
+                                      "SSL_CERT_DIR", "REQUESTS_CA_BUNDLE",
+                                      "CURL_CA_BUNDLE")):
+        raise runtime.ReviewBlocked("UNTRUSTED_PYTHON_OR_CA_ENVIRONMENT")
     return True
 
 

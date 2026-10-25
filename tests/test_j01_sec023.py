@@ -2,6 +2,8 @@
 import copy
 import hashlib
 import unittest
+import json
+from pathlib import Path
 from gads import j01_sec023 as sec
 from gads import j01_pull_only as pull
 from gads import j01_runtime as rt
@@ -145,6 +147,11 @@ class ObservationTests(unittest.TestCase):
 
 
 class SandboxContractTests(unittest.TestCase):
+    def test_checked_in_contract_matches_policy(self):
+        file = Path(__file__).resolve().parents[1] / "docs/security/sandbox-contract-v0.2.6.json"
+        self.assertEqual(sec.declared_sandbox_findings(
+            json.loads(file.read_text(encoding="utf-8"))), [])
+
     def test_exact_spec_passes_lint_only(self):
         self.assertEqual(sec.declared_sandbox_findings(policy()), [])
 

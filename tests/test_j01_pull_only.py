@@ -168,6 +168,18 @@ class BoundaryTests(unittest.TestCase):
         with self.assertRaisesRegex(r.ReviewBlocked, "GITHUB_ACTIONS"):
             p.check_environment({"GITHUB_ACTIONS": "true"})
 
+    def test_injected_proxy_environment_denied(self):
+        for key in ("http_proxy", "HTTPS_PROXY", "ALL_PROXY", "no_proxy"):
+            with self.subTest(key=key):
+                with self.assertRaisesRegex(r.ReviewBlocked, "PROXY"):
+                    p.check_environment({key: "http://attacker.test"})
+
+    def test_injected_python_ca_environment_denied(self):
+        for key in ("PYTHONPATH", "PYTHONSTARTUP", "SSL_CERT_FILE"):
+            with self.subTest(key=key):
+                with self.assertRaisesRegex(r.ReviewBlocked, "PYTHON_OR_CA"):
+                    p.check_environment({key: "/tmp/attacker"})
+
     def test_no_token_environment_accepted(self):
         self.assertTrue(p.check_environment({}))
 
