@@ -1,17 +1,16 @@
-# Status — v0.2.0 clean candidate
+# Status — GADS v0.2.1 trusted gateway candidate
 
-2026-10-25: New branch starts directly at protected main SHA
-`43cb1e6924d208288350d70b7b273f7cd3def0c4`. Old C05 runtime is removed
-from this candidate, C06..C10 temporary code is not inherited. Historical
-source/run evidence indexed in `docs/evidence/historical-index.md`.
+2026-10-25: Separate development branch directly based on the canonical H-00
+v0.2.0 draft PR #10. The new gateway is a **candidate only**; no approved
+protected-main runner, writable token or Git state ref bootstrap is installed.
 
-E1 and manifest must pass on final GitHub source SHA before claiming readiness.
-The core is in-memory only and cannot autonomously write or recover GitHub jobs.
-SEC-01/SEC-02 and formal security review remain unresolved.
+Added fixed-policy Git-CAS read/update adapter with readback and fail-closed
+conflict handling, independent target-run GET checks, simulated adversarial
+API tests and a read-only live historical GitHub provenance probe.
 
-## Hosted candidate evidence
+GitHub E1 on final source SHA still required. Earlier v0.2.0 clean H-00 E1
+succeeded with 26/26 tests; do not treat that as v0.2.1 acceptance.
 
-- [Run #40184639155](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40184639155) PASS on exact source `491e1d7a2b664db7dd75f04104fee5d694591593`; `MANIFEST_PASS files=19`, **26/26 unit tests PASS**.
-- New independent [draft PR #10](https://github.com/spikkie/gads-mode-c-proof/pull/10) targets protected `main`, not the stacked experimental branches. No merge.
-- Current baseline uses one read-only source-quality workflow; final documentary commit requires fresh PR E1 again.
-- Security [issue #8](https://github.com/spikkie/gads-mode-c-proof/issues/8) remains OPEN: older C06–C08 branches still contain potentially runnable write-capable workflows and protected-main review policy still needs strengthening.
+Security issue #8, historical unprotected branch writers, independent human
+approval/strict checks, real billable Copilot ceilings and unattended cross-run
+recovery remain OPEN. No merge, private writes or production use.
