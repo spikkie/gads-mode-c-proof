@@ -38,3 +38,10 @@ automatically or deploy untrusted feature-branch workflows with writes.
 5. [pending] Human-approved protected-main adoption, then real Ollama.
 6. [pending] Authenticate report through trusted signer/check issuer.
 7. [pending] Required status and privileged writer separate approvals.
+
+## SEC-02.3 parallel workstreams / sequential gates
+A. Sandbox policy candidate, actual host/egress enforcement pending.
+B. First-party audit recorded, truly independent J-01 execution pending.
+C. Observation verifier candidate, issuer cryptography/status pending.
+Then owner-approved protected-main integration; real local model proof;
+proven trusted status; separately approved state writer and Mode C.

@@ -52,3 +52,13 @@ NOT RELEASED. Do not treat a passing local mock as trust proof.
       deterministic batches and no silently omitted files (mock tests).
 - [ ] Demonstrate real full-review coverage and cross-file reasoning
       with a sandboxed local model; no trusted status without proof.
+
+## SEC-02.3 candidate DoD
+- [x] Sandbox requirement and drift negative tests (NOT OS enforcement).
+- [x] Integrity-only source/batch-bound observation verifier.
+- [x] First-party static audit and ambient proxy/CA negative tests.
+- [ ] Final-head GitHub E1 and fail-closed writer authority evidence.
+- [ ] Independent fresh-context J-01 source review.
+- [ ] Real isolated VM, filesystem/network and model context proof.
+- [ ] Real Ollama review, authenticated issuer and exact-head required status.
+- [ ] Explicit human integration/privilege approval.

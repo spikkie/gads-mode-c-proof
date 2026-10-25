@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.6 SEC-02.3 candidate — 2026-10-25
+- Parallel sandbox contract, first-party security audit and local observation verifier.
+- Negative tests: forged SHA, batch, trust/status/merge claims and sandbox drift.
+- Refuse ambient proxy, Python and certificate authority injection in local preflight.
+- No real Ollama, independent AI review, host sandbox, check publisher or main merge.
+
 ## 0.2.5 SEC-02.2 candidate — 2026-10-25
 - Reject public GitHub self-hosted runner due to trust-boundary exposure.
 - Correct workflow_dispatch/required PR-status design assumption.

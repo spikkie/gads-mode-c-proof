@@ -54,3 +54,10 @@ Additional read-only live PR analysis: PR #15 is ~33.9 KB, greater than
 previous single-model 24 KB cap. Deterministic complete-file chunking now
 supports up to 64 KiB input and <=8 x 16 KiB batches; no model actually
 ran during these E1 tests. Final-head revalidation pending.
+
+## SEC-02.3 v0.2.6 candidate — 2026-10-25
+Branch `development/gads-sec02-3-parallel-v0.2.6-20261025`.
+Three bounded components: not-deployed sandbox JSON, first-party review,
+fail-closed verifier for non-authoritative local observation. No J-01
+independent run, OS sandbox, local model execution, issuer, main merge or
+private writes. CI exact-head evidence pending.
