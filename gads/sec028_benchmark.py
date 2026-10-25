@@ -48,10 +48,10 @@ def _unique_pairs(pairs):
 
 def _read_strict(path, *, max_bytes=150000):
     path = Path(path)
-    if not path.is_file() or path.is_symlink() or path.stat().st_size > max_bytes:
-        raise rt.ReviewBlocked("EVIDENCE_PATH_OR_SIZE_INVALID")
     if not path.is_absolute():
         raise rt.ReviewBlocked("EVIDENCE_MUST_BE_ABSOLUTE")
+    if not path.is_file() or path.is_symlink() or path.stat().st_size > max_bytes:
+        raise rt.ReviewBlocked("EVIDENCE_PATH_OR_SIZE_INVALID")
     descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
     with os.fdopen(descriptor, "rb") as handle:
         raw = handle.read(max_bytes + 1)
@@ -59,6 +59,8 @@ def _read_strict(path, *, max_bytes=150000):
         raise rt.ReviewBlocked("EVIDENCE_TOO_LARGE")
     try:
         return json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_pairs)
+    except rt.ReviewBlocked:
+        raise
     except (ValueError, UnicodeError) as exc:
         raise rt.ReviewBlocked("EVIDENCE_JSON_INVALID") from exc
 
