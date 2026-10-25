@@ -32,3 +32,10 @@
   provenance or model independence. Local result remains untrusted.
 - D-019: Require isolated guest-local Ollama and explicitly verified
   host/mount/egress restrictions; no host wildcard bind or public runner.
+
+- D-020: With Mac 24 GiB RAM and native Gemma 4 12B consuming ~16 GB,
+  prefer sequential one-model-at-a-time smoke. Actual free RAM unmeasured.
+- D-021: Use native Mac MLX for fast UNTRUSTED synthetic development tests;
+  do not claim guest-local GPU equivalence or expose Mac Ollama to LAN.
+- D-022: Future libkrun/krunkit GPU-VM path is experimentally possible,
+  but requires distinct memory, network, performance and security gates.

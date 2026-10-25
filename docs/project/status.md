@@ -30,3 +30,10 @@ Mac public synthetic GET-only export, strict source hashes, VM offline
 model path and adversarial tests. Mac inventory and guest runtime have NOT
 been executed or observed. Independent review / trusted status / writer
 remain BLOCKED. New exact-head E1 pending.
+
+## SEC-02.7 v0.2.10 candidate — Mac Ollama observations
+Operator Mac: Apple Silicon 24.0 GiB, Gemma4:12b 7.7 GB installed,
+qwen3.5:9b 6.6 GB installed; Gemma running ~16 GB MLX/100% GPU,
+16384 context reported. New local GET probe and deliberate synthetic
+model smoketest code; NO actual model call by CI/ChatGPT. No VM backend,
+no trusted source/status, no owner-approved merge. Final-head E1 pending.

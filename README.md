@@ -1,6 +1,6 @@
 # GADS — canonical H-00 / GitHub Free qualification
 
-**Version: v0.2.9 SEC-02.6 offline J-01 CANDIDATE — NOT RELEASED / NOT ADOPTED.**
+**Version: v0.2.10 SEC-02.7 native Mac Ollama CANDIDATE — NOT RELEASED / NOT ADOPTED.**
 
 One canonical deterministic H-00 codebase in `gads/`. Historical C05–C10
 experimental workflows/branches remain audit-only; no backward-compatibility
@@ -49,3 +49,12 @@ The new `gads/sec026_offline.py` supports separate two-phase operations:
 No guest/VM/model has actually run in hosted CI; package and model
 observation remain UNTRUSTED, never GitHub check, owner merge or writer.
 See `docs/security/sec02-6-offline-v0.2.9.md`.
+
+## SEC-02.7 — Apple Silicon 24 GiB native model test
+On the operator Mac, `python3 -m gads.sec027_mac_model probe --model gemma4:12b`
+performs only three loopback Ollama GETs. An explicit `smoke` operation
+with `--confirm-synthetic-inference` sends ONE hardcoded adversarial
+synthetic security change to the chosen local model, then writes an
+untrusted, private JSON observation. No GitHub API in either operation.
+No Mac/VM runtime was invoked from hosted CI. See
+`docs/security/sec02-7-mac-ollama-v0.2.10.md`.

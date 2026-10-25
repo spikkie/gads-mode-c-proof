@@ -37,3 +37,12 @@ D. [pending] Final-head GitHub E1 + writer gate expected BLOCKED.
 E. [pending] Owner-provided Mac inventory and VM approval, actual negative
    VM-network/mount/secret probes, real guest-local Ollama review.
 F. [pending] Separate trusted issuer/check provenance and human-only merge.
+
+## SEC-02.7 next bundle — native Mac baseline
+A. [candidate] GET-only local Ollama API probe to confirm model digest.
+B. [candidate] Opt-in negative-control synthetic J-01 model run; never trusted.
+C. [candidate] Adversarial source & output tests plus exact-head E1.
+D. [operator] Execute probe on Mac, then optional one-model smoke and
+   report only nonsecret output; consider sequential qwen comparison.
+E. [later] Independently qualified VM GPU/security (krunkit is experimental),
+   true isolated reviewer, signed exact-head check, owner-only main merge.
