@@ -1,10 +1,10 @@
-"""GADS trusted-writer authorization contract (no writes, no credentials).
+"""GADS trusted-writer admission: solo operator plus independent J-01.
 
-A positive *hypothetical* result is not an authorization: actual independent
-review, protected deployed code, App installation/credential and repository
-rules must each be independently confirmed before a real GraphQL CAS call.
+Read-only pure policy. This module does not authorize any token or write.
+J-01 identity assertions are insufficient without authenticated provenance.
 """
 from dataclasses import dataclass
+from gads import j01_review
 
 SOURCE_REPO = "spikkie/gads-mode-c-proof"
 SOURCE_REPO_ID = 1432047514
@@ -15,7 +15,8 @@ LEGACY_REFS = (
     "qualification/c07-trusted-cross-run-20261024",
     "qualification/c08-reconcile-20261024",
 )
-PR_STACK = (10, 11, 12, 13)
+LEGACY_WORKFLOW_IDS = (395044779, 395058116, 395072504, 395083466, 395103255)
+REQUIRED_CHECKS = ("quality", "j01_independent_review", "writer_authorization")
 
 
 @dataclass(frozen=True)
@@ -29,7 +30,11 @@ def _add(out, code, detail=""):
 
 
 def source_ruleset_findings(ruleset):
-    """Recognize required GitHub-enforced controls; unknown is never 'safe'."""
+    """No second human account required; independent J-01 check IS required.
+
+    GitHub Actions integration ID alone cannot prove that a check comes from
+    protected code: separately bind its run/workflow/source provenance.
+    """
     out = []
     if not isinstance(ruleset, dict):
         return [Finding("RULESET_UNAVAILABLE")]
@@ -37,56 +42,40 @@ def source_ruleset_findings(ruleset):
         _add(out, "RULESET_IDENTITY")
     if ruleset.get("enforcement") != "active":
         _add(out, "RULESET_INACTIVE")
-    conditions = ruleset.get("conditions") or {}
-    if "~DEFAULT_BRANCH" not in ((conditions.get("ref_name") or {}).get("include") or []):
+    if "~DEFAULT_BRANCH" not in (((ruleset.get("conditions") or {})
+                                 .get("ref_name") or {}).get("include") or []):
         _add(out, "RULESET_DEFAULT_BRANCH_NOT_INCLUDED")
-    if "bypass_actors" not in ruleset:
-        _add(out, "RULESET_BYPASS_UNVERIFIED")
-    elif not isinstance(ruleset["bypass_actors"], list):
+    if not isinstance(ruleset.get("bypass_actors"), list):
         _add(out, "RULESET_BYPASS_UNVERIFIED")
     elif ruleset["bypass_actors"]:
         _add(out, "RULESET_BYPASS_PRESENT")
     entries = ruleset.get("rules")
     if not isinstance(entries, list):
         return out + [Finding("RULES_UNAVAILABLE")]
-    controls = {x["type"]: x.get("parameters") or {}
-                for x in entries if isinstance(x, dict) and isinstance(x.get("type"), str)}
+    rules = {r["type"]: r.get("parameters") or {} for r in entries
+             if isinstance(r, dict) and isinstance(r.get("type"), str)}
     for kind in ("deletion", "non_fast_forward", "pull_request", "required_status_checks"):
-        if kind not in controls:
+        if kind not in rules:
             _add(out, "MISSING_RULE_" + kind.upper())
-    review = controls.get("pull_request") or {}
-    count = review.get("required_approving_review_count")
-    if type(count) is not int or count < 1:
-        _add(out, "INDEPENDENT_APPROVAL_NOT_ENFORCED")
-    if review.get("dismiss_stale_reviews_on_push") is not True:
-        _add(out, "STALE_REVIEW_DISMISSAL_MISSING")
-    if review.get("require_last_push_approval") is not True:
-        _add(out, "LATEST_PUSH_APPROVAL_MISSING")
-    checks = controls.get("required_status_checks") or {}
+    review = rules.get("pull_request", {})
+    if type(review.get("required_approving_review_count")) is not int:
+        _add(out, "SOLO_REVIEW_POLICY_UNVERIFIED")
+    elif review["required_approving_review_count"] != 0:
+        _add(out, "SECOND_HUMAN_ACCOUNT_REQUIRED")
+    checks = rules.get("required_status_checks", {})
     if checks.get("strict_required_status_checks_policy") is not True:
         _add(out, "STRICT_CI_MISSING")
     required = checks.get("required_status_checks")
-    if not isinstance(required, list) or not any(
-        isinstance(c, dict) and c.get("context") == "quality"
-        and c.get("integration_id") == QUALITY_INTEGRATION_ID
-        for c in required
-    ):
-        _add(out, "REQUIRED_QUALITY_SOURCE_MISSING")
-    if not isinstance(required, list) or not any(
-        isinstance(c, dict) and c.get("context") == "writer_authorization"
-        and c.get("integration_id") == QUALITY_INTEGRATION_ID
-        for c in required
-    ):
-        _add(out, "WRITER_AUTHORIZATION_CHECK_NOT_REQUIRED")
+    for context in REQUIRED_CHECKS:
+        if not isinstance(required, list) or not any(
+            isinstance(c, dict) and c.get("context") == context
+            and c.get("integration_id") == QUALITY_INTEGRATION_ID for c in required
+        ):
+            _add(out, "REQUIRED_TRUSTED_CHECK_MISSING", context)
     return out
 
 
 def scoped_installation_findings(token_metadata, state_repo_id):
-    """Review sanitized response from GitHub App token minting, not a bearer token.
-
-    State repo MUST be separate, containing only synthetic state. The App must
-    not have write access to the GADS source repository.
-    """
     out = []
     if type(state_repo_id) is not int or state_repo_id <= 0 or state_repo_id == SOURCE_REPO_ID:
         _add(out, "SEPARATE_STATE_REPO_REQUIRED")
@@ -101,62 +90,50 @@ def scoped_installation_findings(token_metadata, state_repo_id):
     if not isinstance(permissions, dict) or permissions.get("contents") != "write":
         _add(out, "TOKEN_CONTENTS_WRITE_NOT_PROVEN")
     else:
-        for key, value in permissions.items():
+        for key in permissions:
             if key not in ("contents", "metadata"):
                 _add(out, "TOKEN_EXCESS_PERMISSION", key)
         if permissions.get("metadata") not in (None, "read"):
             _add(out, "TOKEN_METADATA_PERMISSION_UNEXPECTED")
-    # A successful scope check is only necessary, never sufficient.
     return out
 
 
-def review_findings(pulls, reviews):
-    """Request independent latest-head reviews on each PR in the clean stack."""
-    out = []
-    if not isinstance(pulls, dict) or not isinstance(reviews, dict):
-        return [Finding("REVIEW_EVIDENCE_MISSING")]
-    for number in PR_STACK:
-        p = pulls.get(number)
-        rs = reviews.get(number)
-        if not isinstance(p, dict) or not isinstance(rs, list):
-            _add(out, "PR_REVIEW_UNAVAILABLE", str(number))
-            continue
-        head = (p.get("head") or {}).get("sha")
-        owner = (p.get("user") or {}).get("login")
-        if not (isinstance(head, str) and len(head) == 40 and isinstance(owner, str)):
-            _add(out, "PR_IDENTITY_UNVERIFIED", str(number))
-            continue
-        # Review records may include a later dismissal or request-changes;
-        # only the last dated review per independent reviewer can count.
-        if any(not isinstance(r, dict) or not isinstance(r.get("submitted_at"), str)
-               or not isinstance((r.get("user") or {}).get("login"), str) for r in rs):
-            _add(out, "PR_REVIEW_TIMELINE_UNVERIFIED", str(number))
-            continue
-        latest = {}
-        for r in sorted(rs, key=lambda x: x["submitted_at"]):
-            latest[r["user"]["login"]] = r
-        if not any(login != owner and r.get("state") == "APPROVED"
-                   and r.get("commit_id") == head
-                   for login,r in latest.items()):
-            _add(out, "INDEPENDENT_LATEST_HEAD_REVIEW_MISSING", str(number))
-    return out
-
-
-def live_readiness(source_ruleset, pulls, reviews, legacy_branches,
+def live_readiness(ruleset, legacy_branches, workflow_states=None,
+                   j01_attestation=None, j01_run=None, j01_artifact=None,
+                   expected_head=None, expected_base=None, diff_digest=None,
+                   source_main_sha=None, j01_workflow_id=None,
                    state_repo_id=None, app_token_attestation=None,
-                   trusted_source_deployed=False, state_repo_hardened=False):
-    findings = source_ruleset_findings(source_ruleset)
-    findings += review_findings(pulls, reviews)
+                   trusted_source_deployed=False, state_repo_hardened=False,
+                   owner_release_approved=False):
+    """All missing security evidence fails closed. No approval is minted."""
+    findings = source_ruleset_findings(ruleset)
     if not isinstance(legacy_branches, dict):
         _add(findings, "LEGACY_BRANCH_AUTHORITY_UNAVAILABLE")
     else:
-        for branch in LEGACY_REFS:
-            observed = legacy_branches.get(branch)
+        for ref in LEGACY_REFS:
+            observed = legacy_branches.get(ref)
             if not isinstance(observed, dict) or observed.get("protected") is not True:
-                _add(findings, "LEGACY_WRITER_BRANCH_NOT_PROTECTED", branch)
+                _add(findings, "LEGACY_WRITER_BRANCH_NOT_PROTECTED", ref)
+    if not isinstance(workflow_states, dict):
+        _add(findings, "LEGACY_WORKFLOW_STATES_UNAVAILABLE")
+    else:
+        for wid in LEGACY_WORKFLOW_IDS:
+            if workflow_states.get(wid) != "disabled_manually":
+                _add(findings, "LEGACY_WORKFLOW_NOT_DISABLED", str(wid))
+    if (j01_attestation is None or j01_run is None or j01_artifact is None):
+        _add(findings, "J01_EVIDENCE_ABSENT")
+    else:
+        for problem in j01_review.evidence_findings(
+            j01_attestation, j01_run, j01_artifact,
+            reviewed_head=expected_head, base_head=expected_base,
+            diff_digest=diff_digest, main_sha=source_main_sha,
+            trusted_workflow_id=j01_workflow_id):
+            _add(findings, problem)
     findings += scoped_installation_findings(app_token_attestation, state_repo_id)
     if trusted_source_deployed is not True:
         _add(findings, "TRUSTED_SOURCE_NOT_DEPLOYED")
     if state_repo_hardened is not True:
         _add(findings, "STATE_REPO_RULES_UNVERIFIED")
+    if owner_release_approved is not True:
+        _add(findings, "OWNER_RELEASE_APPROVAL_MISSING")
     return sorted(findings, key=lambda v: (v.code, v.detail))

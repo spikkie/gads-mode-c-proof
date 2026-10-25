@@ -1,25 +1,24 @@
 # Changelog
 
-## 0.2.3-candidate — 2026-10-25
+## 0.2.3 SEC-02 candidate - 2026-10-25
+- Reconciled sole human operator and independent J-01 review semantics.
+- Added fail-closed independent J-01 run/artifact/head/diff evidence policy.
+- Replaced second-human reviewer rule in writer authorization policy.
+- Read-only live probe now checks historical workflow disabled states.
+- Added adversarial tests and reconciled project MVP/DoD/plan/status.
+- SEC-01 five historic workflows disabled and 3 refs frozen: ruleset 25822045.
+- Trusted J-01 and state writer NOT deployed; no merge or adoption.
 
-- Added a read-only GitHub writer-authorization gate and 27 adversarial tests.
-- Requires independent reviews, source protection, and separate state-only
-  GitHub App repository scope before any writer could be approved.
-- Live gate intentionally BLOCKED, no grant or secret installation.
+## 0.2.3 initial candidate - 2026-10-25
+- Added read-only GitHub writer-authority and negative tests.
+- Live gate intentionally BLOCKED.
 
+## 0.2.2 candidate - 2026-10-25
+- Corrected REST fast-forward vs atomic beforeOid CAS semantics.
+- GraphQL updateRefs injected gateway and deterministic negative tests.
 
-## 0.2.2-candidate — 2026-10-25
-- Identified REST `force:false` as fast-forward-only, not atomic expected-old
-  commit compare-and-swap. Refactored gateway to GraphQL `updateRefs`
-  `beforeOid` / `afterOid` request with fail-closed unknown outcomes.
-- Added adversarial test cases for stale expected-head writes, missing GraphQL
-  acknowledgement, and a timeout after a mutation possibly succeeded.
-- Exercised real synthetic Git branch race without Actions write tokens.
-- No backward compatibility with prior proof implementations.
-- Remains an unmerged security-reviewed candidate only.
+## 0.2.1 candidate - 2026-10-25
+- Bounded read-only GitHub state gateway contract and E1.
 
-## 0.2.1-candidate — 2026-10-25
-- Read-only gateway identity probe; simulated Git ref updates (57 E1 cases).
-
-## 0.2.0-candidate — 2026-10-25
-- Canonical pure deterministic H-00 model and tracked SHA256 manifest.
+## 0.2.0 candidate - 2026-10-25
+- Clean canonical deterministic H-00 baseline and integrity manifest.

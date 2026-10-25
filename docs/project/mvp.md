@@ -1,5 +1,11 @@
-# MVP — GADS H-00 clean baseline v0.2.0
+# MVP - GADS canonical H-00 v0.2.3 candidate
 
-Canonical H-00 deterministic state transitions, retry prevention on uncertainty,
-fenced lease, source-bound correlation, synthetic budget reservation and strict
-read-only E1. No real GitHub writes, paid model calls, publisher or consumers.
+One deterministic H-00 controller with pure workpackage/state transitions,
+source-bound provenance, fail-closed uncertainty, bounded synthetic budget,
+GraphQL beforeOid state-CAS adapter (not live authenticated yet), E1 and
+independent read-only J-01 review protocol with ONE human operator.
+
+Development and evidence remain only in the public synthetic GitHub Free
+repository. No retrocompatible C05-C10 runner, no production/private writes,
+no real AI charges, no privileged publisher, no unattended production merge.
+See docs/security/solo-operator-j01-sec02.md.
