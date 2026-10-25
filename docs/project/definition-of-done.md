@@ -16,3 +16,18 @@
 - [ ] Independent reviewer and owner approve any merge/deployment/adoption.
 
 Not released. Green E1 is not security signoff.
+
+## 0.2.3 — trusted writer authorization
+
+- [x] Define source branch/ruleset/review admission and separate state-only
+      GitHub App least-privilege contract; reject stale or missing approvals.
+- [x] Host negative tests and read-only current-GitHub preflight.
+- [ ] Writer-authority live gate PASS — currently intentionally BLOCKED.
+- [ ] Current clean PRs #10, #11, #12 and #13 independently reviewed.
+- [ ] Source main security controls enforced, old writer refs quarantined.
+- [ ] State-only repository and App install approved and scoped by owner.
+- [ ] Trusted gateway refactored for separate source-reader/state-writer.
+- [ ] Real GraphQL beforeOid CAS proof under approved trusted runtime.
+- [ ] Real outbox, run correlation, AI budget and unattended crash recovery.
+
+This slice adds no writer privileges; full Mode C remains NOT PROVEN.

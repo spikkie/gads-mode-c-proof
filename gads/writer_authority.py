@@ -15,7 +15,7 @@ LEGACY_REFS = (
     "qualification/c07-trusted-cross-run-20261024",
     "qualification/c08-reconcile-20261024",
 )
-PR_STACK = (10, 11, 12)
+PR_STACK = (10, 11, 12, 13)
 
 
 @dataclass(frozen=True)

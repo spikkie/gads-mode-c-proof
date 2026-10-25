@@ -14,3 +14,15 @@ proof and must not be called approved atomic CAS.
 Final-head CI and independent review remain required. Security issue #8,
 unprotected legacy branch writers, human approval rules, provider billing
 and unattended recovery remain OPEN. No merged PR or main/private writes.
+
+## Writer authorization preflight — 2026-10-25
+
+[Read-only E1 #40192165262](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40192165262)
+PASS: 89/89 tests. [Live authority gate #40192165265](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40192165265)
+BLOCKED as expected, reporting 16 unresolved control conditions at initial
+source SHA `195a5f3e60a58933d5bd4d9ab5e1f306797907cc`.
+
+Draft PR #13 (stacked on #12) has been added to the reviewer scope; final
+head must be requalified. This does not deploy a privileged writer. No
+separate state-only repository, App installation, source-main merge or token
+grant exists. SEC-01 / SEC-02 and full Mode C remain open.

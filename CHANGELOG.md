@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.3-candidate — 2026-10-25
+
+- Added a read-only GitHub writer-authorization gate and 27 adversarial tests.
+- Requires independent reviews, source protection, and separate state-only
+  GitHub App repository scope before any writer could be approved.
+- Live gate intentionally BLOCKED, no grant or secret installation.
+
+
 ## 0.2.2-candidate — 2026-10-25
 - Identified REST `force:false` as fast-forward-only, not atomic expected-old
   commit compare-and-swap. Refactored gateway to GraphQL `updateRefs`

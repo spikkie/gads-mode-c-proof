@@ -40,3 +40,11 @@ not live verified end-to-end. Real model costs, durable outbox, multi-run
 recovery and full Mode C are **NOT PROVEN**.
 
 0.2.2 requires GraphQL `updateRefs(beforeOid, afterOid)`. REST `force:false` alone is only fast-forward protection. Real write-token installation and GraphQL live proof remain blocked pending independent review.
+
+## Writer authorization (v0.2.3)
+
+The separate read-only writer-authority preflight intentionally reports
+BLOCKED pending independent review, protected source branch controls, and a
+dedicated synthetic state-only GitHub App installation. No write token is
+available to feature-branch CI. See
+`docs/security/writer-authorization-v0.2.3.md`.
