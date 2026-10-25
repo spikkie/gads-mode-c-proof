@@ -1,6 +1,6 @@
 # GADS — canonical H-00 / GitHub Free qualification
 
-**Version: v0.2.10 SEC-02.7 native Mac Ollama CANDIDATE — NOT RELEASED / NOT ADOPTED.**
+**Version: v0.2.11 SEC-02.8 20-case model evaluation CANDIDATE — NOT RELEASED / NOT ADOPTED.**
 
 One canonical deterministic H-00 codebase in `gads/`. Historical C05–C10
 experimental workflows/branches remain audit-only; no backward-compatibility
@@ -58,3 +58,14 @@ synthetic security change to the chosen local model, then writes an
 untrusted, private JSON observation. No GitHub API in either operation.
 No Mac/VM runtime was invoked from hosted CI. See
 `docs/security/sec02-7-mac-ollama-v0.2.10.md`.
+
+## SEC-02.8 — local 20-case Mac Ollama evaluation
+`python3 -m gads.sec028_benchmark plan` reads the fixed blinded
+20-case oracle with NO model inference. `run --model MODEL --batch 1..4
+--output ABSOLUTE_NEW_JSON --confirm-synthetic-inference` uses five
+synthetic cases with a selected single local model and writes an untrusted
+0600 batch report; use `score --inputs ... --output NEW_JSON` to
+recalculate decision false-positive/false-negative and heuristic factual
+signals. Model never sees expected labels, grading rules or oracle
+rationale. No trusted review or GitHub writer authorization is possible.
+See `docs/security/sec02-8-evaluation-v0.2.11.md`.

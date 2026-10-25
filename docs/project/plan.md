@@ -46,3 +46,14 @@ D. [operator] Execute probe on Mac, then optional one-model smoke and
    report only nonsecret output; consider sequential qwen comparison.
 E. [later] Independently qualified VM GPU/security (krunkit is experimental),
    true isolated reviewer, signed exact-head check, owner-only main merge.
+
+## SEC-02.8 development and operator qualification
+A. [candidate] 20 predeclared balanced security cases, disjoint oracle metadata.
+B. [candidate] Mac one-model five-case batch runner, no GitHub API/tool calls.
+C. [candidate] Deterministic offline scorer including Qwen directionality
+   contradictions, FP/FN, time and error/coverage.
+D. [pending] E1 at final source SHA; main/writer gates unchanged.
+E. [operator] Optional sequential Gemma/GPT-OSS/Qwen real 20-case runs,
+   first run only batch 1 for each; never concurrent GPU models.
+F. [independent] Audit model findings and corpus labeling, expand hidden
+   cases and repeat stability; VM trusted J-01 and issuer remain later gates.

@@ -1,7 +1,8 @@
-# GADS v0.2.10 SEC-02.7 — candidate only
+# GADS v0.2.11 SEC-02.8 — CANDIDATE
 
-NOT RELEASED / NOT MERGED / NOT ADOPTED / FULL MODE C BLOCKED.
-Native macOS Ollama inventory/synthetic model protocol is NOT actual
-trusted J-01 security execution; only operator can invoke it locally.
-No VM deployment, signing credentials, GitHub check, writer grant or
-protected-main source/state changes were authorized.
+**NOT RELEASED / NOT MERGED / NOT ADOPTED / MODE C BLOCKED.**
+Balanced security test corpus and independent-metadata deterministic
+scorer in untrusted Mac-native development. The authored oracle itself
+is not independently audited; regex findings are only heuristic.
+No real twenty-case model comparison executed, OS VM isolation,
+authenticated status issuer, private state writer or owner merge.

@@ -31,3 +31,9 @@ Real operator baseline: macOS arm64, 24 GiB, installed gemma4:12b and
 qwen3.5:9b; Gemma active MLX 100% GPU, ~16 GB loaded and 16384 context
 at CLI observation. New read-only Ollama model probe and opt-in *synthetic*
 negative-control inference; results are UNTRUSTED dev-only observations.
+
+## SEC-02.8 v0.2.11 evaluation MVP
+Deterministic 20-case synthetic benchmark and predeclared test oracle:
+10 expected approvals, 10 denials. One Mac local Ollama model/batch
+per explicit opt-in, offline deterministic confusion metrics and
+heuristic fact checks; no signed provenance or privileged actions.

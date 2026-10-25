@@ -1,5 +1,14 @@
 # Changelog — canonical GADS
 
+## v0.2.11 — SEC-02.8 Mac security evaluation (2026-10-25)
+- Added immutable twenty-case synthetic corpus (8 safe, 8 unsafe, 4 adversarial).
+- Added blind model inputs with oracle labels excluded from prompts.
+- Added Mac local-only one-model, five-case repeatable evaluation batches.
+- Added strict offline scorer: FP, FN, inference errors, regex contradiction signals,
+  coverage, latency and all three model comparison without trust promotion.
+- Source tests use fake Ollama responses, not live model execution; independent
+  human oracle validation, VM isolation, GitHub App issuer and merge remain open.
+
 ## v0.2.10 — SEC-02.7 Mac model development candidate (2026-10-25)
 - Qualify observed 24 GiB macOS/ARM64 MLX Gemma 4 12B and alternate Qwen 3.5 9B.
 - Added local-only GET inventory with full model digest and loaded-state report.
