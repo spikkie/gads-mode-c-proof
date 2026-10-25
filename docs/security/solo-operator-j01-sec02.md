@@ -67,3 +67,10 @@ retries, untrusted branches, bypass, rights and missing owner approval.
 4. Human-owned adoption gate verified, no unattended main merge.
 5. Live read-only SEC-02 gate PASS on current PR head; SEC-01 remains sound.
 6. Separate final owner approval for any state writer privileges.
+
+## GitHub ZIP artifact digest
+The native `artifact.digest` is SHA256 of the uploaded ZIP archive,
+NOT the canonical attestation JSON. The trusted verifier MUST retrieve
+the ZIP from the authenticated GitHub artifact API, check the entire
+archive digest, accept exactly one bounded JSON entry and reject duplicate
+JSON keys, symlinks and extra paths. That downloader is NOT deployed yet.

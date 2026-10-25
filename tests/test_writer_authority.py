@@ -2,7 +2,9 @@
 import copy
 import hashlib
 import json
+import io
 import unittest
+import zipfile
 from gads import writer_authority as a
 from gads import j01_review as j
 
@@ -27,11 +29,29 @@ def token():
             "permissions": {"contents": "write", "metadata": "read"}}
 
 
+def _pack(report):
+    out = io.BytesIO()
+    with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        z.writestr(j.MEMBER_NAME, json.dumps(report, sort_keys=True,
+                                            separators=(",", ":"), ensure_ascii=True))
+    return out.getvalue()
+
+
+def _alter(packed, art, key, value, refresh=True):
+    report = j._load_report(packed)
+    report[key] = value
+    changed = _pack(report)
+    if refresh:
+        art["digest"] = "sha256:" + hashlib.sha256(changed).hexdigest()
+    return changed
+
+
 def j01():
     main, head, base = "a" * 40, "b" * 40, "c" * 40
     digest = "d" * 64
     run = {"id": 12345, "workflow_id": 8179, "repository": {
-        "full_name": a.SOURCE_REPO}, "event": "workflow_dispatch",
+        "full_name": a.SOURCE_REPO, "id": a.SOURCE_REPO_ID},
+        "event": "workflow_dispatch",
         "head_branch": "main", "head_sha": main, "status": "completed",
         "conclusion": "success", "run_attempt": 1}
     report = {"schema": "gads.j01-attestation.v1", "reviewer": "J-01",
@@ -39,13 +59,14 @@ def j01():
               "base_head": base, "diff_sha256": digest, "trusted_main_sha": main,
               "run_id": 12345, "context_kind": "fresh_independent",
               "model_execution_id": "review-invocation-123"}
-    canon = json.dumps(report, sort_keys=True, separators=(",", ":"),
-                       ensure_ascii=True).encode("ascii")
-    artifact = {"id": 17, "expired": False, "workflow_run": {"id": 12345},
-                "digest": "sha256:" + hashlib.sha256(canon).hexdigest()}
+    packed = _pack(report)
+    artifact = {"id": 17, "name": j.ARCHIVE_NAME, "expired": False,
+                "workflow_run": {"id": 12345, "repository_id": a.SOURCE_REPO_ID,
+                                 "head_sha": main},
+                "digest": "sha256:" + hashlib.sha256(packed).hexdigest()}
     args = {"reviewed_head": head, "base_head": base, "diff_digest": digest,
             "main_sha": main, "trusted_workflow_id": 8179}
-    return report, run, artifact, args
+    return packed, run, artifact, args
 
 
 def codes(findings):
@@ -177,25 +198,25 @@ class J01TrustTests(unittest.TestCase):
 
     def test_self_asserted_context_without_identity_denied(self):
         r, run, art, kw = j01()
-        r["model_execution_id"] = ""
+        r = _alter(r, art, "model_execution_id", "")
         self.assertIn("J01_INDEPENDENCE_CONTRACT_INVALID",
                       j.evidence_findings(r, run, art, **kw))
 
     def test_operator_decision_in_model_artifact_denied(self):
         r, run, art, kw = j01()
-        r["operator_final_decision"] = "MERGE"
+        r = _alter(r, art, "operator_final_decision", "MERGE")
         self.assertIn("J01_INDEPENDENCE_CONTRACT_INVALID",
                       j.evidence_findings(r, run, art, **kw))
 
     def test_unapproved_review_denied(self):
         r, run, art, kw = j01()
-        r["decision"] = "REQUEST_CHANGES"
+        r = _alter(r, art, "decision", "REQUEST_CHANGES")
         self.assertIn("J01_REVIEW_CONTENT_MISMATCH",
                       j.evidence_findings(r, run, art, **kw))
 
     def test_forged_artifact_digest_denied(self):
         r, run, art, kw = j01()
-        r["decision"] = "REQUEST_CHANGES"
+        r = _alter(r, art, "decision", "REQUEST_CHANGES", refresh=False)
         self.assertIn("J01_ARTIFACT_PROVENANCE_INVALID",
                       j.evidence_findings(r, run, art, **kw))
 
@@ -211,6 +232,59 @@ class J01TrustTests(unittest.TestCase):
         self.assertIn("J01_ARTIFACT_PROVENANCE_INVALID",
                       j.evidence_findings(r, run, art, **kw))
 
+
+    def test_invalid_zip_denied(self):
+        r, run, art, kw = j01()
+        r = b"invalid archive"
+        art["digest"] = "sha256:" + hashlib.sha256(r).hexdigest()
+        self.assertIn("J01_ARTIFACT_ARCHIVE_INVALID",
+                      j.evidence_findings(r, run, art, **kw))
+
+    def test_unexpected_zip_member_denied(self):
+        r, run, art, kw = j01()
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as z:
+            z.writestr(j.MEMBER_NAME, "{}")
+            z.writestr("../evil.py", "print(1)")
+        r = buf.getvalue()
+        art["digest"] = "sha256:" + hashlib.sha256(r).hexdigest()
+        self.assertIn("J01_ARTIFACT_ARCHIVE_INVALID",
+                      j.evidence_findings(r, run, art, **kw))
+
+    def test_duplicate_json_key_denied(self):
+        r, run, art, kw = j01()
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as z:
+            z.writestr(j.MEMBER_NAME, '{"reviewer":"J-01","reviewer":"W-01"}')
+        r = buf.getvalue()
+        art["digest"] = "sha256:" + hashlib.sha256(r).hexdigest()
+        self.assertIn("J01_ARTIFACT_ARCHIVE_INVALID",
+                      j.evidence_findings(r, run, art, **kw))
+
+    def test_oversized_zip_denied(self):
+        r, run, art, kw = j01()
+        r = b"x" * (j.MAX_ARCHIVE_BYTES + 1)
+        art["digest"] = "sha256:" + hashlib.sha256(r).hexdigest()
+        self.assertIn("J01_ARTIFACT_ARCHIVE_INVALID",
+                      j.evidence_findings(r, run, art, **kw))
+
+    def test_wrong_artifact_repository_denied(self):
+        r, run, art, kw = j01()
+        art["workflow_run"]["repository_id"] = 777
+        self.assertIn("J01_ARTIFACT_PROVENANCE_INVALID",
+                      j.evidence_findings(r, run, art, **kw))
+
+    def test_wrong_trusted_run_repository_denied(self):
+        r, run, art, kw = j01()
+        run["repository"]["id"] = 777
+        self.assertIn("J01_TRUSTED_RUN_PROVENANCE_INVALID",
+                      j.evidence_findings(r, run, art, **kw))
+
+    def test_wrong_artifact_name_denied(self):
+        r, run, art, kw = j01()
+        art["name"] = "untrusted"
+        self.assertIn("J01_ARTIFACT_PROVENANCE_INVALID",
+                      j.evidence_findings(r, run, art, **kw))
 
 class WriterBoundaryTests(unittest.TestCase):
     def test_single_state_only_app(self):

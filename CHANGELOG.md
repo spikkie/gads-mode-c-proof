@@ -3,6 +3,7 @@
 ## 0.2.3 SEC-02 candidate - 2026-10-25
 - Reconciled sole human operator and independent J-01 review semantics.
 - Added fail-closed independent J-01 run/artifact/head/diff evidence policy.
+- Corrected to whole-artifact ZIP SHA256; reject hostile archive structure.
 - Replaced second-human reviewer rule in writer authorization policy.
 - Read-only live probe now checks historical workflow disabled states.
 - Added adversarial tests and reconciled project MVP/DoD/plan/status.
