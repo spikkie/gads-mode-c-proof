@@ -5,7 +5,7 @@ import unittest
 from gads import j01_sec023 as sec
 from gads import j01_pull_only as pull
 from gads import j01_runtime as rt
-from tests import test_j01_pull_only as fixtures
+import test_j01_pull_only as fixtures
 
 
 def pair():
