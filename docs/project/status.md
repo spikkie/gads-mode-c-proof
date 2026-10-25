@@ -1,16 +1,33 @@
-# GADS status — exact-old-SHA atomic state update candidate
+# GADS status - 2026-10-25 - SEC-02 candidate
 
-2026-10-25: v0.2.1 source E1 passed 57/57 tests. The security review found
-that REST `force:false` is only a fast-forward check; 0.2.2 replaces the
-proposed state update with injectable GraphQL `updateRefs` carrying
-`beforeOid` and `afterOid` plus fail-closed unknown-ack handling.
+Canonical public synthetic v0.2.3 draft PR #13 extends #10-#12.
+Base `main` has not been merged or mutated. Historic C05-C10 are NOT
+maintained as runtime code. The candidate uses canonical H-00 and two
+read-only workflows (quality, writer-authority).
 
-Live GitHub public synthetic branch `qualification/gads-cas-isolated-20261025`
-was initialized from protected main. Competing writer A succeeded; writer B
-returned an unknown GitHub GraphQL error. Live ref readback found winner A,
-generation 1. This is **not** a live end-to-end `updateRefs(beforeOid)`
-proof and must not be called approved atomic CAS.
+SEC-01 historical writers: five workflow IDs 395044779, 395058116,
+395072504, 395083466, 395103255 reported `disabled_manually` by owner
+CLI; no in-progress runs reported. New ruleset 25822045 is active,
+bypass_actors=[], with exact three historical refs; independent live GitHub
+GET shows each ref `protected=true`. The historical code remains
+preserved solely for audit and is not a backwards-compatibility interface.
 
-Final-head CI and independent review remain required. Security issue #8,
-unprotected legacy branch writers, human approval rules, provider billing
-and unattended recovery remain OPEN. No merged PR or main/private writes.
+SEC-02: replace incompatible second-human GitHub reviewer requirement
+with an independent fresh-context AI J-01 evidence policy and separate
+human release approval. Model invocation, independent context and trusted
+required status are not deployed/proven. Strong negative tests are added.
+The current live gate must remain BLOCKED.
+
+Previous exact-head v0.2.3 read-only CI success:
+https://github.com/spikkie/gads-mode-c-proof/actions/runs/40192429487
+and fail-closed security gate:
+https://github.com/spikkie/gads-mode-c-proof/actions/runs/40192425445
+These are historical relative to this NEW candidate commit, not evidence
+of its final HEAD.
+
+GraphQL beforeOid has mock-backed unit evidence, NOT a live authenticated
+mutate/compare test; prior GitHub branch race is not that test.
+State-only repo, App token, owner authorization, model budget, outbox,
+native recovery, actual independent J-01 and full Mode C remain OPEN.
+
+**WRITER BLOCKED / NO PRIVATE WRITES / NO MAIN MERGE / NOT ADOPTED.**

@@ -5,6 +5,7 @@ on:
       - development/gads-clean-baseline-v0.2.0-20261025
       - development/gads-trusted-gateway-v0.2.1-20261025
       - development/gads-atomic-cas-v0.2.2-20261025
+      - development/gads-writer-authority-v0.2.3-20261025
   pull_request:
 permissions: {}
 jobs:

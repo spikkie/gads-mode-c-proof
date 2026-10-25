@@ -1,42 +1,35 @@
-# GitHub Autonomous Development Standard — clean H-00 baseline
+# GADS - canonical H-00, GitHub Free synthetic qualification
 
-**v0.2.2 development candidate · public synthetic only · NOT ADOPTED**
+**v0.2.3 SEC-02 development candidate - NOT ADOPTED**
 
-The canonical code in `gads/` is developed without backward compatibility
-with C-05..C-10 proof runners. The old evidence and commit SHAs remain linked
-in `docs/evidence/historical-index.md`; old branches have not been merged.
+One canonical deterministic H-00 runtime in `gads/`, no backwards
+compatibility for C05-C10 experimental runners. Historical run evidence
+is preserved separately for audit, but is not part of the product runtime.
 
-## Architecture
+- `gads/h00.py`: deterministic workpackage/state and synthetic budget.
+- `gads/github_gateway.py`: bounded beforeOid GraphQL state gateway
+  candidate; real atomic CAS and writer authority not deployed.
+- `gads/j01_review.py`: proposed fresh-context independent AI reviewer
+  evidence policy, *not* a live AI model invocation.
+- `gads/writer_authority.py`: solo operator, strict required J-01 and
+  source provenance rules, disabled historical workflow checks.
+- `gads/writer_authority_probe.py`: read-only live GitHub inspection;
+  intentionally fail-closed without active approved security controls.
+- `gads/manifest.py`: complete Git tracked checkout SHA256 verification.
 
-- `gads/h00.py`: pure deterministic workpackage and synthetic budget model.
-- `gads/github_gateway.py`: bounded injectable GitHub Git-CAS gateway;
-  fixed state ref, runner/source authority policy and independent GET of
-  target-run metadata.
-- `gads/readonly_probe.py`: live GET-only GitHub historical identity smoke.
-- `gads/manifest.py`: SHA256 protection for the entire tracked checkout.
-- `.github/workflows/quality.yml`: E1, with `contents:read` and
-  `actions:read` only. **No privileged gateway invocation.**
-
-## Validation
-
+Local validation:
 ```bash
 python3 -m gads.manifest verify --root .
 python3 -m unittest discover -s tests -v
 ```
 
-Live GitHub provenance smoke executes in Actions with a read-only token.
-No Copilot upgrade, private account credential or third-party dependency is
-required.
+E1 and security workflows only use read-only GitHub credentials.
+A second human GitHub account is NOT an architectural requirement;
+one human authorizes merging, and J-01 independently evaluates exact
+immutable changes. The secure J-01 runtime/check status is NOT deployed.
 
-## Security status
-
-A pinned policy permits H-00 gateway use only from approved protected-main
-source, against one state ref. **Code-level scoping does not narrow GitHub
-token privileges.** Actual live trusted-writer deployment remains blocked by
-security issue #8 and independent reviewer/owner approval.
-
-Correlated target attestation is a testable API contract in this candidate,
-not live verified end-to-end. Real model costs, durable outbox, multi-run
-recovery and full Mode C are **NOT PROVEN**.
-
-0.2.2 requires GraphQL `updateRefs(beforeOid, afterOid)`. REST `force:false` alone is only fast-forward protection. Real write-token installation and GraphQL live proof remain blocked pending independent review.
+SEC-01 old writers are administratively disabled and historical branches
+frozen; read-only SEC-02 review is still BLOCKED. See
+`docs/security/solo-operator-j01-sec02.md`, `docs/project/`.
+No production write, source main merge, token, paid AI bill, private
+repository change or complete Mode C qualification is claimed.
