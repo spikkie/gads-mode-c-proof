@@ -1,6 +1,6 @@
 # GADS - canonical H-00, GitHub Free synthetic qualification
 
-**v0.2.3 SEC-02 development candidate - NOT ADOPTED**
+**v0.2.4 SEC-02.1 development candidate - NOT ADOPTED**
 
 One canonical deterministic H-00 runtime in `gads/`, no backwards
 compatibility for C05-C10 experimental runners. Historical run evidence
@@ -33,3 +33,12 @@ frozen; read-only SEC-02 review is still BLOCKED. See
 `docs/security/solo-operator-j01-sec02.md`, `docs/project/`.
 No production write, source main merge, token, paid AI bill, private
 repository change or complete Mode C qualification is claimed.
+
+## SEC-02.1 — J-01 executable candidate
+Read-only `gads/j01_runtime.py` fetches and bounds an immutable GitHub
+PR diff by exact SHA, sends it to loopback-only Ollama in fresh no-tools
+context and emits a source-bound J-01 attestation. The proposed
+`.github/workflows/j01-trusted-proposed.yml` MUST first be security
+reviewed and explicitly adopted into protected main, and use an isolated
+ephemeral runner. It is NOT yet deployed; no actual model invocation or
+trusted reviewer status is claimed. See `docs/security/j01-runtime-v0.2.4.md`.

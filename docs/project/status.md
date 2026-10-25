@@ -31,3 +31,11 @@ State-only repo, App token, owner authorization, model budget, outbox,
 native recovery, actual independent J-01 and full Mode C remain OPEN.
 
 **WRITER BLOCKED / NO PRIVATE WRITES / NO MAIN MERGE / NOT ADOPTED.**
+
+## v0.2.4 — SEC-02.1 candidate (2026-10-25)
+Separate canonical branch `development/gads-trusted-j01-v0.2.4-20261025`
+based on v0.2.3 exact SHA `9532d5154005709676f4eeaacff7730c141d30de`.
+Adds bounded GET-only GitHub snapshot, fresh Ollama protocol, J-01 report,
+and protected-main-only workflow proposal. Feature-branch workflow is not
+trusted and no protected-main deployment, real model call or write token
+has been authorized. CI evidence will be recorded after final-head runs.

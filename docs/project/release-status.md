@@ -1,14 +1,10 @@
-# GADS v0.2.3 SEC-02 candidate - release status
+# GADS v0.2.4 SEC-02.1 — CANDIDATE ONLY
 
 **NOT RELEASED / NOT MERGED / NOT ADOPTED / MODE C NOT PROVEN.**
 
-SEC-01 historical workflow and branch quarantine evidence has passed
-the bounded mitigation. The candidate removes the second-human GitHub
-reviewer dependency and defines a more suitable J-01 protocol plus negative
-tests, but no J-01 model executor, trusted workflow, required status
-integration, owner adoption proof or scoped state App is deployed.
-
-REST force:false is not exact-old-SHA CAS. The GraphQL beforeOid logic
-is still a unit-tested candidate, not a real authenticated live proof.
-No new tokens, public/private repository writes, model usage or main merges
-are permitted from this read-only candidate.
+One canonical public-synthetic developer branch: bounded read-only J-01
+runtime and a proposed protected-main-only workflow. No real local Ollama
+inference, trusted artifact, independent status attestation, state-writer
+credential, private repo change or automatic merge has occurred.
+Final-head E1 pending. Source and trust-boundary deployment must be
+independently reviewed and approved by the human owner.

@@ -22,3 +22,16 @@
 
 **NOT RELEASED / NOT MERGED / NOT ADOPTED.** A synthetic passing fixture is
 not evidence of a running J-01. Source and private repositories unchanged.
+
+## SEC-02.1 — trusted J-01 candidate
+- [x] Read-only bounded GitHub PR diff and exact source SHA snapshot.
+- [x] Two-message isolated Ollama protocol and bounded output contract.
+- [x] Proposed protected-main-only workflow; no feature-code checkout.
+- [x] Hostile-input/inference/provenance negative tests added.
+- [ ] Final-head GitHub E1 on v0.2.4 commit.
+- [ ] Independently audit and deploy trusted workflow on protected main.
+- [ ] Ephemeral isolated runner and actual Ollama inference run.
+- [ ] GitHub ZIP attestation re-read and run provenance verified.
+- [ ] Exact PR SHA status independently issued and made required.
+- [ ] Human approval for any source-main merge or writer authority.
+**Runtime still BLOCKED; tests are not real independent AI execution.**
