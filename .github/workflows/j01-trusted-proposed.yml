@@ -1,0 +1,46 @@
+name: GADS J-01 trusted read-only reviewer (deployment candidate)
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Exact numeric PR to review"
+        required: true
+        type: number
+      expected_head:
+        description: "Exact immutable PR SHA"
+        required: true
+        type: string
+
+permissions: {}
+jobs:
+  j01:
+    if: github.ref == 'refs/heads/main' && github.actor == 'spikkie'
+    runs-on: [self-hosted, linux, x64, gads-j01-ephemeral]
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout protected main code, never PR code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify approved tree manifest
+        run: python3 -m gads.manifest verify --root .
+      - name: Fresh independent Ollama review of exact PR SHA
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GADS_J01_MODEL: "gemma4:12b"
+          TARGET_PR: ${{ inputs.pr_number }}
+          TARGET_SHA: ${{ inputs.expected_head }}
+        run: python3 -m gads.j01_runtime --pr "$TARGET_PR" --head "$TARGET_SHA"
+      - name: Store immutable result, even if J-01 requests changes
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: gads-j01-attestation-v1
+          path: j01-attestation.json
+          retention-days: 7
+          archive: true
+          if-no-files-found: error
