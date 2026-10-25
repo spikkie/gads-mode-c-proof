@@ -1,5 +1,11 @@
 # Changelog — canonical GADS
 
+## v0.2.8 — SEC-02.5 Mac host (2026-10-25)
+- Corrected Linux-host assumption: development runs on macOS, with an isolated Linux guest as future proof boundary.
+- Added non-mutating macOS inventory CLI and fail-closed guest/network/mount/credential contract.
+- Added tests for host home exposure, guest-to-Mac loopback, Mac Ollama bridging, and status spoofing.
+- No real VM/model execution, independent J-01, GitHub issuer, writer or merge.
+
 ## v0.2.7 — SEC-02.4 candidate (2026-10-25)
 - Bundled three security development workstreams: local sandbox inspection,
   independent J-01 review handoff, and synthetic HMAC/SQLite replay contract.

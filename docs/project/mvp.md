@@ -16,3 +16,6 @@ independent model run. No actual Ollama call from hosted CI.
 Excluded: private source/NMTP writes, GitHub Pro upgrade, legacy C05–C10
 runners or compatibility, unapproved source-main merge, production
 publisher, real model budget, durable outbox and complete Mode C.
+
+## v0.2.8 macOS host correction
+Mac is the operator development host. Actual trusted model evaluation requires a separately provisioned, isolated Linux guest. Preflight/source tests only; no Mac configuration or real Ollama invocation in this slice.
