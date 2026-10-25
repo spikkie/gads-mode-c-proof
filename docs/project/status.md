@@ -22,3 +22,11 @@ writer, live exact-beforeOid CAS, full Mode C.
 
 ## SEC-02.5 v0.2.8 candidate — macOS correction
 Source branch `development/gads-sec02-5-macos-v0.2.8-20261025` stacked on v0.2.7 SHA `652dbef9d0128ad198873853ddb2aac20d538acc`. Public synthetic only. Mac read-only preflight and stricter isolated guest policy. No actual Mac inspection, VM startup, guest egress probe, model run, independent J-01 or accepted release. Exact-head CI pending.
+
+## SEC-02.6 v0.2.9 candidate (Mac -> offline VM)
+Child branch `development/gads-sec02-6-offline-v0.2.9-20261025` extends
+v0.2.8 `158feebeb7ec802a9fdeef5b87434bdf29c9567f`.
+Mac public synthetic GET-only export, strict source hashes, VM offline
+model path and adversarial tests. Mac inventory and guest runtime have NOT
+been executed or observed. Independent review / trusted status / writer
+remain BLOCKED. New exact-head E1 pending.

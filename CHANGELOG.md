@@ -1,5 +1,12 @@
 # Changelog — canonical GADS
 
+## v0.2.9 — SEC-02.6 offline J-01 candidate (2026-10-25)
+- Added Mac anonymous public-GET exact-head review package export.
+- Added independent offline guest-local Ollama review path without GitHub access.
+- Added strict package schema, SHA/batch/diff coverage and filesystem protections.
+- Added malicious/broken packet, missing batch, model failure and token-negative tests.
+- No trusted reviewer, Mac/VM execution, source-main merge or writer permissions.
+
 ## v0.2.8 — SEC-02.5 Mac host (2026-10-25)
 - Corrected Linux-host assumption: development runs on macOS, with an isolated Linux guest as future proof boundary.
 - Added non-mutating macOS inventory CLI and fail-closed guest/network/mount/credential contract.

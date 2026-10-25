@@ -25,3 +25,10 @@
 - D-014: This project's development workstation is Mac; Linux host assumptions are superseded.
 - D-015: No Mac home/work mounts, implicit host loopback or Mac Ollama exposure into untrusted review VM. Guest-local model is baseline for trusted experiment.
 - D-016: Read-only Mac model observations are untrusted; any future trusted status needs separate issuer and explicit human gate.
+
+- D-017: Separate public synthetic acquisition on Mac (anonymous GitHub
+  GET) from model evaluation in an offline Linux guest (no GitHub calls).
+- D-018: Full SHA/batch self-consistency does NOT authenticate source
+  provenance or model independence. Local result remains untrusted.
+- D-019: Require isolated guest-local Ollama and explicitly verified
+  host/mount/egress restrictions; no host wildcard bind or public runner.
