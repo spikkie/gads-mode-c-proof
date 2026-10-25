@@ -47,7 +47,7 @@ class BatchTests(unittest.TestCase):
 
     def test_too_many_chunks(self):
         with self.assertRaisesRegex(r.ReviewBlocked, "TOO_MANY"):
-            b.partition(snapshot(10, 700), max_batch_bytes=1024)
+            b.partition(snapshot(10, 850), max_batch_bytes=1350)
 
     def test_invalid_max_bytes_denied(self):
         with self.assertRaisesRegex(r.ReviewBlocked, "BATCH_BUDGET"):

@@ -70,7 +70,7 @@ class BoundaryTests(unittest.TestCase):
         api = API()
         api.files = [dict(filename="part-" + str(i) + ".txt",
                           status="modified",
-                          patch="@@ -1 +1 @@\\n-old\\n+" + ("x" * 1000),
+                          patch="@@ -1 +1 @@\n-old\n+" + ("x" * 1000),
                           additions=1, deletions=1, changes=2)
                      for i in range(18)]
         calls = []
@@ -91,7 +91,7 @@ class BoundaryTests(unittest.TestCase):
         api = API()
         api.files = [dict(filename="f" + str(i) + ".py",
                           status="modified",
-                          patch="@@ -1 +1 @@\\n-old\\n+" + ("x" * 1000),
+                          patch="@@ -1 +1 @@\n-old\n+" + ("x" * 1000),
                           additions=1, deletions=1, changes=2)
                      for i in range(18)]
         n = [0]
@@ -112,7 +112,7 @@ class BoundaryTests(unittest.TestCase):
         api = API()
         api.files = [dict(filename="f" + str(i) + ".py",
                           status="modified",
-                          patch="@@ -1 +1 @@\\n-old\\n+" + ("x" * 1000),
+                          patch="@@ -1 +1 @@\n-old\n+" + ("x" * 1000),
                           additions=1, deletions=1, changes=2)
                      for i in range(18)]
         n = [0]
