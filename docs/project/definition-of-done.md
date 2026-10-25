@@ -37,3 +37,14 @@ execution trust, OS isolation, production signature, or check authorization.
 - [ ] Independently verified OS guest isolation: host mounts, host loopback, external egress and guest Ollama.
 - [ ] Real independent SHA-bound J-01 model review and authenticated evidence.
 - [ ] Trusted issuer, explicit human merge approval and Mode C security exit.
+
+## SEC-02.6 v0.2.9 — offline review handoff
+- [x] Mac read-only public synthetic PR export with exact-head binding.
+- [x] Guest offline model path with NO direct GitHub APIs or credentials.
+- [x] Complete bounded patch/batch revalidation and untrusted outputs.
+- [x] Negative tests for replay-like tampering, forged trust, paths, model failures.
+- [ ] Exact-head 0.2.9 manifest / GitHub push+PR E1 PASS.
+- [ ] Independently assessed code + provisioned hardened guest VM.
+- [ ] Real guest-only local Ollama and no-host-network/secret proof.
+- [ ] Trusted verifier authenticating independently fetched GitHub source.
+- [ ] Actual independent J-01 judgment and owner-approved protected main.

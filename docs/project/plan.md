@@ -28,3 +28,12 @@ A. [candidate] Mac Python-only read-only CLI inventory.
 B. [candidate] Mac->isolated Linux guest, no automatic shared home or host loopback; real VM qualification pending.
 C. [candidate] Mac Ollama remains developer-only; for trusted guest review model must be guest local or later separately approved secure model relay.
 D. [pending] Exact SHA CI, true independent reviewer, sandbox evidence, safe issuer and human-only main integration.
+
+## SEC-02.6 next gate — offline Mac/guest qualification
+A. [candidate] Public synthetic exact-head GET and source package on Mac.
+B. [candidate] Offline no-GitHub guest J-01 evaluation and negative tests.
+C. [candidate] SHA/batch consistency proof; deliberately not authenticated.
+D. [pending] Final-head GitHub E1 + writer gate expected BLOCKED.
+E. [pending] Owner-provided Mac inventory and VM approval, actual negative
+   VM-network/mount/secret probes, real guest-local Ollama review.
+F. [pending] Separate trusted issuer/check provenance and human-only merge.

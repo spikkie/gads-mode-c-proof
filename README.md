@@ -1,6 +1,6 @@
 # GADS — canonical H-00 / GitHub Free qualification
 
-**Version: v0.2.8 SEC-02.5 macOS CANDIDATE — NOT RELEASED / NOT ADOPTED.**
+**Version: v0.2.9 SEC-02.6 offline J-01 CANDIDATE — NOT RELEASED / NOT ADOPTED.**
 
 One canonical deterministic H-00 codebase in `gads/`. Historical C05–C10
 experimental workflows/branches remain audit-only; no backward-compatibility
@@ -41,3 +41,11 @@ See `docs/project/`, `docs/security/sec02-4-bundle-v0.2.7.md`.
 
 ## SEC-02.5 — Mac developer host
 The development host is macOS, not Linux. Use `python3 -m gads.sec025_macos preflight` **only after source review** for non-mutating tool presence and ambient-risk inventory. Podman on Mac requires a Linux VM. Host Ollama at 127.0.0.1 is not the guest model. The strict guest contract never proves OS isolation or writer authority. See `docs/security/sec02-5-macos-v0.2.8.md`.
+
+## v0.2.9 macOS public snapshot -> offline Linux guest
+The new `gads/sec026_offline.py` supports separate two-phase operations:
+`export` uses anonymous public synthetic GitHub GET from Mac, while
+`review` in a future isolated Linux guest uses only guest-local Ollama.
+No guest/VM/model has actually run in hosted CI; package and model
+observation remain UNTRUSTED, never GitHub check, owner merge or writer.
+See `docs/security/sec02-6-offline-v0.2.9.md`.
