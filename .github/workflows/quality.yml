@@ -9,6 +9,7 @@ on:
       - development/gads-trusted-j01-v0.2.4-20261025
       - development/gads-j01-pull-only-v0.2.5-20261025
       - development/gads-sec02-3-parallel-v0.2.6-20261025
+      - development/gads-sec02-4-bundle-v0.2.7-20261025
   pull_request:
 permissions: {}
 jobs:

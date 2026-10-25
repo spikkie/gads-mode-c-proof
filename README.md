@@ -1,59 +1,40 @@
-# GADS - canonical H-00, GitHub Free synthetic qualification
+# GADS — canonical H-00 / GitHub Free qualification
 
-**v0.2.6 SEC-02.3 development candidate - NOT ADOPTED**
+**Version: v0.2.7 SEC-02.4 CANDIDATE — NOT RELEASED / NOT ADOPTED.**
 
-One canonical deterministic H-00 runtime in `gads/`, no backwards
-compatibility for C05-C10 experimental runners. Historical run evidence
-is preserved separately for audit, but is not part of the product runtime.
+One canonical deterministic H-00 codebase in `gads/`. Historical C05–C10
+experimental workflows/branches remain audit-only; no backward-compatibility
+runtime or source-main integration. Public synthetic GitHub Free only.
 
-- `gads/h00.py`: deterministic workpackage/state and synthetic budget.
-- `gads/github_gateway.py`: bounded beforeOid GraphQL state gateway
-  candidate; real atomic CAS and writer authority not deployed.
-- `gads/j01_review.py`: proposed fresh-context independent AI reviewer
-  evidence policy, *not* a live AI model invocation.
-- `gads/writer_authority.py`: solo operator, strict required J-01 and
-  source provenance rules, disabled historical workflow checks.
-- `gads/writer_authority_probe.py`: read-only live GitHub inspection;
-  intentionally fail-closed without active approved security controls.
-- `gads/manifest.py`: complete Git tracked checkout SHA256 verification.
+## Current code
+- `gads/h00.py`: deterministic H-00 state machine and synthetic limits.
+- `gads/github_gateway.py`: testable GraphQL exact-beforeOid CAS adapter;
+  no authenticated trusted live state write has passed.
+- `gads/writer_authority.py`: read-only fail-closed authority policy.
+- `gads/j01_runtime.py`, `gads/j01_batches.py`: bounded GitHub snapshot
+  and model message protocols. No privileged PR code execution.
+- `gads/j01_pull_only.py`: credentialless **non-authoritative** local
+  observation runner; NOT a GitHub Actions self-hosted runner.
+- `gads/j01_sec023.py`: cross-check untrusted observation and immutable
+  full PR diff/batch coverage, never upgrade it to trusted.
+- `gads/sec024_sandbox.py`: normalize/inspect a proposed local rootless
+  Podman offline network/containers, **not** a deployed firewall.
+- `gads/sec024_handoff.py`: exact-SHA clean-context J-01 review handoff
+  and non-authoritative returned-review consistency policy.
+- `gads/sec024_challenge.py`: synthetic-key HMAC nonce/expiry/replay
+  **reference test**, NOT a trusted signing key or GitHub check publisher.
 
-Local validation:
+## Validate source locally
 ```bash
 python3 -m gads.manifest verify --root .
 python3 -m unittest discover -s tests -v
 ```
 
-E1 and security workflows only use read-only GitHub credentials.
-A second human GitHub account is NOT an architectural requirement;
-one human authorizes merging, and J-01 independently evaluates exact
-immutable changes. The secure J-01 runtime/check status is NOT deployed.
+GitHub-hosted E1 is read-only; the writer authority workflow MUST remain
+BLOCKED until truly isolated reviewed source, independent J-01 execution,
+owner adoption, required trusted GitHub status, and separate state-only
+writer privileges are proven. No model run occurred in GitHub CI.
+No merge to main, private repository writes, real model billing or token
+grant is permitted by this candidate.
 
-SEC-01 old writers are administratively disabled and historical branches
-frozen; read-only SEC-02 review is still BLOCKED. See
-`docs/security/solo-operator-j01-sec02.md`, `docs/project/`.
-No production write, source main merge, token, paid AI bill, private
-repository change or complete Mode C qualification is claimed.
-
-## SEC-02.1 — J-01 executable candidate
-Read-only `gads/j01_runtime.py` fetches and bounds an immutable GitHub
-PR diff by exact SHA, sends it to loopback-only Ollama in fresh no-tools
-context and emits a source-bound J-01 attestation. The proposed
-`.github/workflows/j01-trusted-proposed.yml` MUST first be security
-reviewed and explicitly adopted into protected main, and use an isolated
-ephemeral runner. It is NOT yet deployed; no actual model invocation or
-trusted reviewer status is claimed. See `docs/security/j01-runtime-v0.2.4.md`.
-
-## SEC-02.2 public runner correction
-The v0.2.4 proposed public GitHub self-hosted Actions workflow is
-REMOVED from the clean candidate. Do not register an Actions runner.
-`gads/j01_pull_only.py` uses only public GitHub GET and local Ollama
-to generate an untrusted, non-authorizing observation; no tokens,
-writer rights, required checks or protected main deployment.
-See `docs/security/runner-threat-model-v0.2.5.md`.
-
-## SEC-02.3 — three workstreams in one candidate
-`gads/j01_sec023.py` validates local untrusted review consistency
-against an independently acquired exact-head diff plus every batch.
-Its output **never** upgrades a model verdict to a trusted J-01 status.
-`docs/security/sandbox-contract-v0.2.6.json` is a design, not a
-host firewall or deployed VM. See docs/security/sec02-3-parallel-review-v0.2.6.md.
+See `docs/project/`, `docs/security/sec02-4-bundle-v0.2.7.md`.

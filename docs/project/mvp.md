@@ -1,26 +1,18 @@
-# MVP - GADS canonical H-00 v0.2.4 SEC-02.1 candidate
+# GADS — MVP scope (v0.2.7 candidate)
 
-One deterministic H-00 controller with pure workpackage/state transitions,
-source-bound provenance, fail-closed uncertainty, bounded synthetic budget,
-GraphQL beforeOid state-CAS adapter (not live authenticated yet), E1 and
-independent read-only J-01 review protocol with ONE human operator.
+Goal: deterministic H-00 orchestrates bounded candidate workpackages and
+enforces fail-closed authorization, with independent J-01 security review,
+SHA-bound evidence and explicit human merge/adoption.
 
-Development and evidence remain only in the public synthetic GitHub Free
-repository. No retrocompatible C05-C10 runner, no production/private writes,
-no real AI charges, no privileged publisher, no unattended production merge.
-See docs/security/solo-operator-j01-sec02.md.
+Implementation in public synthetic GitHub Free only: canonical H-00,
+read-only GitHub state/snapshot, exact-beforeOid gateway policy, local
+anonymous J-01 model-observation protocol and integrity tests.
 
-## Increment v0.2.4
-J-01 read-only runtime candidate: bounded authenticated GitHub PR snapshots,
-no-code-checkout, local Ollama /api/chat fresh context without tools,
-immutable diff digest and proposed attestation uploader. Private and paid
-provider calls remain out of scope; trusted deployment pending approval.
+SEC-02.4 increment: local sandbox inspection contract (A), reproducible
+clean-context J-01 review packet (B), prototype challenge/HMAC/nonce and
+SQLite anti-replay policy (C). These do not deploy a sandbox or sign an
+independent model run. No actual Ollama call from hosted CI.
 
-## v0.2.5 SEC-02.2 correction
-Public GitHub runner registration is excluded. A credentialless local
-pull-only J-01 process may produce *only* an untrusted review observation.
-Source/merge/writer trust remains behind independent approval.
-
-## 0.2.6 SEC-02.3 concurrent development
-Sandbox specification, first-party static audit, and integrity-only
-local observation verification. No independent runtime or trusted issuer.
+Excluded: private source/NMTP writes, GitHub Pro upgrade, legacy C05–C10
+runners or compatibility, unapproved source-main merge, production
+publisher, real model budget, durable outbox and complete Mode C.

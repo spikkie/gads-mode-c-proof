@@ -1,63 +1,21 @@
-# GADS status - 2026-10-25 - SEC-02 candidate
+# GADS status — 2026-10-25 / v0.2.7 SEC-02.4 candidate
 
-Canonical public synthetic v0.2.3 draft PR #13 extends #10-#12.
-Base `main` has not been merged or mutated. Historic C05-C10 are NOT
-maintained as runtime code. The candidate uses canonical H-00 and two
-read-only workflows (quality, writer-authority).
+Canonical source on public synthetic GitHub Free branch
+`development/gads-sec02-4-bundle-v0.2.7-20261025`, stacked over v0.2.6.
+Protected `main` remains unchanged unless separately verified otherwise.
 
-SEC-01 historical writers: five workflow IDs 395044779, 395058116,
-395072504, 395083466, 395103255 reported `disabled_manually` by owner
-CLI; no in-progress runs reported. New ruleset 25822045 is active,
-bypass_actors=[], with exact three historical refs; independent live GitHub
-GET shows each ref `protected=true`. The historical code remains
-preserved solely for audit and is not a backwards-compatibility interface.
+Three new components: A pure Podman inspection policy, B immutable source
+review handoff, C synthetic HMAC/nonce/replay verification with local
+SQLite ledger. All explicitly produce untrusted/prototype decisions,
+NEVER GitHub write authority or merge approval. Hardened requirements
+do NOT constitute host installation or independent model inference.
 
-SEC-02: replace incompatible second-human GitHub reviewer requirement
-with an independent fresh-context AI J-01 evidence policy and separate
-human release approval. Model invocation, independent context and trusted
-required status are not deployed/proven. Strong negative tests are added.
-The current live gate must remain BLOCKED.
+Previous v0.2.6 exact-head E1: 193/193 tests, manifest 50 PASS, live
+writer authority BLOCKED with ten remaining blockers.
+Those results do NOT qualify current v0.2.7 head. New E1 pending.
+Historical disabled workflows and protected refs remain audit-only.
 
-Previous exact-head v0.2.3 read-only CI success:
-https://github.com/spikkie/gads-mode-c-proof/actions/runs/40192429487
-and fail-closed security gate:
-https://github.com/spikkie/gads-mode-c-proof/actions/runs/40192425445
-These are historical relative to this NEW candidate commit, not evidence
-of its final HEAD.
-
-GraphQL beforeOid has mock-backed unit evidence, NOT a live authenticated
-mutate/compare test; prior GitHub branch race is not that test.
-State-only repo, App token, owner authorization, model budget, outbox,
-native recovery, actual independent J-01 and full Mode C remain OPEN.
-
-**WRITER BLOCKED / NO PRIVATE WRITES / NO MAIN MERGE / NOT ADOPTED.**
-
-## v0.2.4 — SEC-02.1 candidate (2026-10-25)
-Separate canonical branch `development/gads-trusted-j01-v0.2.4-20261025`
-based on v0.2.3 exact SHA `9532d5154005709676f4eeaacff7730c141d30de`.
-Adds bounded GET-only GitHub snapshot, fresh Ollama protocol, J-01 report,
-and protected-main-only workflow proposal. Feature-branch workflow is not
-trusted and no protected-main deployment, real model call or write token
-has been authorized. CI evidence will be recorded after final-head runs.
-
-SEC-02.1 security hardening: reject GitHub truncated diff patches by
-cross-checking addition/deletion counts and reject duplicate model JSON keys.
-
-## v0.2.5 — SEC-02.2 architecture correction
-Static first-party review found HIGH public Actions self-hosted runner
-compromise risk and the missing required PR-check event provenance.
-New clean development branch removes that workflow, adds pull-only
-credentialless local J-01 observations with explicit non-authority.
-Final-head CI pending. No real Ollama review, merge or approved runner.
-
-Additional read-only live PR analysis: PR #15 is ~33.9 KB, greater than
-previous single-model 24 KB cap. Deterministic complete-file chunking now
-supports up to 64 KiB input and <=8 x 16 KiB batches; no model actually
-ran during these E1 tests. Final-head revalidation pending.
-
-## SEC-02.3 v0.2.6 candidate — 2026-10-25
-Branch `development/gads-sec02-3-parallel-v0.2.6-20261025`.
-Three bounded components: not-deployed sandbox JSON, first-party review,
-fail-closed verifier for non-authoritative local observation. No J-01
-independent run, OS sandbox, local model execution, issuer, main merge or
-private writes. CI exact-head evidence pending.
+OPEN: live isolated sandbox; fresh independent actual model execution;
+authentic trusted issuer/check, human owner approval, separate source/state
+writer, live exact-beforeOid CAS, full Mode C.
+**NO MERGE / NO PRIVATE WRITES / NO TOKEN / NOT ADOPTED.**
