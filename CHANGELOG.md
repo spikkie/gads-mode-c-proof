@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.4 SEC-02.1 candidate — 2026-10-25
+- Added read-only bounded J-01 GitHub PR snapshot + local-only Ollama runner.
+- Added new two-message context, model output contract and exact-head attestation.
+- Staged main-only manually dispatched workflow with pinned upload-artifact.
+- Added adversarial tests, patch-count completeness and duplicate-key rejection.
+- No live model call / writer / main merge.
+
 ## 0.2.3 SEC-02 candidate - 2026-10-25
 - Reconciled sole human operator and independent J-01 review semantics.
 - Added fail-closed independent J-01 run/artifact/head/diff evidence policy.

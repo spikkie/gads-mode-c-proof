@@ -20,3 +20,10 @@
   W-01/PR/model-supplied assertions alone NEVER authorize writer access.
 - D-012: Public synthetic GitHub Free testbed. GitLab Self-Managed is a
   future provider adapter, not a second H-00 runtime.
+
+- D-013 (SEC-02.1): J-01 receives a bounded read-only GitHub diff pinned
+  to exact SHA and uses loopback Ollama with only two fresh messages, no
+  tools, no retries and no execution of PR code.
+- D-014: Only independently audited protected-main code on a restricted
+  ephemeral runner can claim trusted J-01 artifacts; a candidate workflow
+  running on an unprotected branch NEVER grants writer authority.

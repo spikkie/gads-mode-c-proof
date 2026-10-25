@@ -20,3 +20,12 @@
 
 Keep public synthetic code only. Do not merge stacked candidates
 automatically or deploy untrusted feature-branch workflows with writes.
+
+## SEC-02.1 v0.2.4 qualification sequence
+1. Candidate Python runner, workflow, security/tests on new stacked draft PR.
+2. Final-head integrity and E1 negative tests on GitHub Actions.
+3. Independent review of source, runner isolation and model prompt injection.
+4. Human-approved main deployment and dedicated ephemeral local runner.
+5. Execute real trusted Ollama J-01 review; verify ZIP and run metadata.
+6. Only then implement non-forgeable exact-head J-01 required check.
+7. Separately authorize limited state writer; all other work remains gated.

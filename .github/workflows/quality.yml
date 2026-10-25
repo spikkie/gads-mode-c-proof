@@ -6,6 +6,7 @@ on:
       - development/gads-trusted-gateway-v0.2.1-20261025
       - development/gads-atomic-cas-v0.2.2-20261025
       - development/gads-writer-authority-v0.2.3-20261025
+      - development/gads-trusted-j01-v0.2.4-20261025
   pull_request:
 permissions: {}
 jobs:

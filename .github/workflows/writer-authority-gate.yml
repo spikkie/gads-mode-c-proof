@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - development/gads-writer-authority-v0.2.3-20261025
+      - development/gads-trusted-j01-v0.2.4-20261025
 permissions: {}
 jobs:
   writer_authorization:
