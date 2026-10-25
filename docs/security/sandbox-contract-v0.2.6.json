@@ -1,0 +1,35 @@
+{
+  "schema": "gads.sandbox-requirements.v1",
+  "status": "SPECIFICATION_NOT_DEPLOYED",
+  "runner_registration": "FORBIDDEN",
+  "github_api": {
+    "auth": "NONE",
+    "methods": [
+      "GET"
+    ],
+    "repo": "spikkie/gads-mode-c-proof",
+    "data": "PUBLIC_SYNTHETIC_ONLY"
+  },
+  "model": {
+    "endpoint": "http://127.0.0.1:11434/api/chat",
+    "tools": "FORBIDDEN",
+    "inherited_context": "FORBIDDEN"
+  },
+  "network": {
+    "default": "DENY",
+    "external_except_github_read": "DENY",
+    "model_service_only_loopback": true
+  },
+  "filesystem": {
+    "source_checkout": "READ_ONLY",
+    "output": "NEW_FILES_ONLY",
+    "work_data": "NO_ACCESS",
+    "ssh_keys": "NO_ACCESS",
+    "docker_socket": "NO_ACCESS"
+  },
+  "identity": {
+    "github_token": "NONE",
+    "cloud_keys": "NONE",
+    "write_permissions": "NONE"
+  }
+}
