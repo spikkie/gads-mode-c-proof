@@ -49,7 +49,9 @@ def canonical(obj):
                       separators=(",", ":")).encode("ascii")
 
 
-def snapshot(get, number, expected_head):
+def snapshot(get, number, expected_head, *, max_bytes=MAX_DIFF_BYTES):
+    if type(max_bytes) is not int or not MAX_DIFF_BYTES <= max_bytes <= 65536:
+        raise ReviewBlocked("INVALID_DIFF_BUDGET")
     if type(number) is not int or not 1 <= number <= 100000:
         raise ReviewBlocked("INVALID_PR_NUMBER")
     if not isinstance(expected_head, str) or not SHA.fullmatch(expected_head):
@@ -107,7 +109,7 @@ def snapshot(get, number, expected_head):
             "reviewed_head": expected_head,
             "files": sorted(files, key=lambda item: item["path"])}
     raw = canonical(data)
-    if len(raw) > MAX_DIFF_BYTES:
+    if len(raw) > max_bytes:
         raise ReviewBlocked("DIFF_EXCEEDS_BUDGET")
     if identity(get(f"/pulls/{number}")) != base:
         raise ReviewBlocked("PR_CHANGED_DURING_SNAPSHOT")

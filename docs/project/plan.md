@@ -29,3 +29,12 @@ automatically or deploy untrusted feature-branch workflows with writes.
 5. Execute real trusted Ollama J-01 review; verify ZIP and run metadata.
 6. Only then implement non-forgeable exact-head J-01 required check.
 7. Separately authorize limited state writer; all other work remains gated.
+
+## SEC-02.2 milestones
+1. [candidate] Replace public self-hosted runner with pull-only local.
+2. [pending] Final-head E1 and fail-closed writer authority requalify.
+3. [pending] External independent source/security reviewer, SHA-bound.
+4. [pending] Isolated local sandbox with verified egress and no tokens.
+5. [pending] Human-approved protected-main adoption, then real Ollama.
+6. [pending] Authenticate report through trusted signer/check issuer.
+7. [pending] Required status and privileged writer separate approvals.

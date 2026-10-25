@@ -1,6 +1,6 @@
 # GADS - canonical H-00, GitHub Free synthetic qualification
 
-**v0.2.4 SEC-02.1 development candidate - NOT ADOPTED**
+**v0.2.5 SEC-02.2 development candidate - NOT ADOPTED**
 
 One canonical deterministic H-00 runtime in `gads/`, no backwards
 compatibility for C05-C10 experimental runners. Historical run evidence
@@ -42,3 +42,11 @@ context and emits a source-bound J-01 attestation. The proposed
 reviewed and explicitly adopted into protected main, and use an isolated
 ephemeral runner. It is NOT yet deployed; no actual model invocation or
 trusted reviewer status is claimed. See `docs/security/j01-runtime-v0.2.4.md`.
+
+## SEC-02.2 public runner correction
+The v0.2.4 proposed public GitHub self-hosted Actions workflow is
+REMOVED from the clean candidate. Do not register an Actions runner.
+`gads/j01_pull_only.py` uses only public GitHub GET and local Ollama
+to generate an untrusted, non-authorizing observation; no tokens,
+writer rights, required checks or protected main deployment.
+See `docs/security/runner-threat-model-v0.2.5.md`.
