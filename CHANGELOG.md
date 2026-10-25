@@ -1,45 +1,19 @@
-# Changelog
+# Changelog — canonical GADS
 
-## 0.2.6 SEC-02.3 candidate — 2026-10-25
-- Parallel sandbox contract, first-party security audit and local observation verifier.
-- Negative tests: forged SHA, batch, trust/status/merge claims and sandbox drift.
-- Refuse ambient proxy, Python and certificate authority injection in local preflight.
-- No real Ollama, independent AI review, host sandbox, check publisher or main merge.
+## v0.2.7 — SEC-02.4 candidate (2026-10-25)
+- Bundled three security development workstreams: local sandbox inspection,
+  independent J-01 review handoff, and synthetic HMAC/SQLite replay contract.
+- Added strictly untrusted decision/report semantics; no check publication,
+  owner approval, model review or writer permissions.
+- Added adversarial tests for privileged containers, network/secret exposure,
+  stale review SHA, forged handoff, invalid/replayed/expired receipts.
+- Reconciled canonical MVP, Definition of Done, Plan, status and release notes.
+- Kept GitHub Free, public synthetic, and protected source main unchanged.
 
-## 0.2.5 SEC-02.2 candidate — 2026-10-25
-- Reject public GitHub self-hosted runner due to trust-boundary exposure.
-- Correct workflow_dispatch/required PR-status design assumption.
-- Add credentialless pull-only local reviewer, tests and threat model.
-- Bound complete-file batch coverage for PRs exceeding single-context limits.
-- No trusted model review, protected-main merge, release or writer grant.
-
-## 0.2.4 SEC-02.1 candidate — 2026-10-25
-- Added read-only bounded J-01 GitHub PR snapshot + local-only Ollama runner.
-- Added new two-message context, model output contract and exact-head attestation.
-- Staged main-only manually dispatched workflow with pinned upload-artifact.
-- Added adversarial tests, patch-count completeness and duplicate-key rejection.
-- No live model call / writer / main merge.
-
-## 0.2.3 SEC-02 candidate - 2026-10-25
-- Reconciled sole human operator and independent J-01 review semantics.
-- Added fail-closed independent J-01 run/artifact/head/diff evidence policy.
-- Corrected to whole-artifact ZIP SHA256; reject hostile archive structure.
-- Replaced second-human reviewer rule in writer authorization policy.
-- Read-only live probe now checks historical workflow disabled states.
-- Added adversarial tests and reconciled project MVP/DoD/plan/status.
-- SEC-01 five historic workflows disabled and 3 refs frozen: ruleset 25822045.
-- Trusted J-01 and state writer NOT deployed; no merge or adoption.
-
-## 0.2.3 initial candidate - 2026-10-25
-- Added read-only GitHub writer-authority and negative tests.
-- Live gate intentionally BLOCKED.
-
-## 0.2.2 candidate - 2026-10-25
-- Corrected REST fast-forward vs atomic beforeOid CAS semantics.
-- GraphQL updateRefs injected gateway and deterministic negative tests.
-
-## 0.2.1 candidate - 2026-10-25
-- Bounded read-only GitHub state gateway contract and E1.
-
-## 0.2.0 candidate - 2026-10-25
-- Clean canonical deterministic H-00 baseline and integrity manifest.
+## Prior candidate evidence (audit-only, not backward compatibility)
+- v0.2.6 SEC-02.3: 193/193 E1, 50 SHA256 entries, writer gate BLOCKED.
+- v0.2.5 SEC-02.2: retired unsafe public self-hosted reviewer proposal.
+- v0.2.4 SEC-02.1: initial read-only J-01 runtime candidate.
+- v0.2.3: solo human operator + AI J-01 policy, read-only authority.
+- v0.2.2: mocked exact-beforeOid GraphQL state compare-and-swap.
+- v0.2.0–v0.2.1: clean canonical H-00 and bounded GitHub adapter.
