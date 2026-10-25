@@ -1,9 +1,14 @@
-# Plan
+# Plan — canonical H-00 without backward compatibility
 
-1. Bootstrap this standalone synthetic-only public repo and run E1.
-2. Enable and verify effective protected `main` and constrained Actions PR creation.
-3. Bind one full reviewed `main` SHA in repository variable.
-4. Run C-05 chain; fix only observed blockers in reviewed PRs.
-5. Inspect exact draft PR, two-file diff and duplicate dispatch behavior.
-6. Execute negative runtime tests and record immutable evidence.
-7. Report C-05 publicly QUALIFIED only after all applicable checks pass; do not claim full Mode C qualified here.
+1. Build clean read-only H-00 state machine and strict integrity/negative tests.
+2. Independently review the pure transition contract.
+3. Design an isolated trusted protected-source GitHub CAS publisher, separate
+   from untrusted workpackage source execution.
+4. Introduce durable outbox, uniquely correlated provider evidence and real
+   bounded AI usage accounting.
+5. Resolve SEC-01 writer authority and SEC-02 required independent approvals.
+6. Qualify true unattended recovery after a fresh full-workflow interruption.
+7. Only with explicit owner and independent review approval consider adoption.
+
+Never merge unreviewed draft PRs, import C06..C10 modules or keep deprecated
+compatibility wrappers during this new development.

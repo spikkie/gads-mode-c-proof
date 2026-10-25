@@ -1,5 +1,14 @@
-# Security for a public synthetic-only proof
+# Security boundary — public synthetic candidate
 
-All repository files, commits, workflow logs, draft PRs and created branches are public. Do not publish passwords, API tokens, private organization names, private project source, personal email addresses or system topology. GitHub Actions may print diagnostic outputs; never print its ephemeral token or upload private artifacts. Never connect private repositories or deploy a real system from this demonstration.
+No private repository source, secrets, customer names, topology, credentials,
+external deployment, or production data may enter this repository.
 
-The workflow must fail closed on absent branch protection or source-SHA authorization. A passing synthetic proof does not grant authority in any other repository.
+Candidate CI uses read-only GitHub permissions with pinned checkout and
+`persist-credentials: false`. New H-00 code contains no HTTP, Git, model
+or repository-write operations. Any future effecting gateway must read
+authoritative GitHub evidence itself rather than accepting a supplied payload.
+
+Pure transition correctness does not establish real side-effect exactly-once,
+protected branch controls, authenticated provider usage or actual spend caps.
+
+Full Mode C **NOT PROVEN / NOT ADOPTED**. Security issues #1 and #8 remain open.
