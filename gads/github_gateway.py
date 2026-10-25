@@ -121,6 +121,8 @@ class Gateway:
             require(len(raw) == entry["size"] and
                     entry.get("sha") == blob_hash(raw), "STATE_BLOB_MISMATCH")
             state = json.loads(raw.decode("ascii"))
+        except Blocked:
+            raise
         except (ValueError, UnicodeError, TypeError, KeyError) as exc:
             raise Blocked("STATE_DECODING") from exc
         try:
