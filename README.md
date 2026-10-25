@@ -1,40 +1,40 @@
 # GitHub Autonomous Development Standard — clean H-00 baseline
 
-**v0.2.0 development candidate · public synthetic only · NOT ADOPTED**
+**v0.2.1 development candidate · public synthetic only · NOT ADOPTED**
 
-This candidate is based directly on the protected `main` baseline and does not
-include the stacked C-06–C-10 temporary implementations. We intentionally
-replace the historical C-05 proof runtime in this candidate; original immutable
-commits and Actions runs remain indexed in `docs/evidence/historical-index.md`.
+The canonical code in `gads/` is developed without backward compatibility
+with C-05..C-10 proof runners. The old evidence and commit SHAs remain linked
+in `docs/evidence/historical-index.md`; old branches have not been merged.
 
-## One canonical implementation
+## Architecture
 
-- `gads/h00.py`: deterministic, pure H-00 state machine
-- `gads/manifest.py`: complete tracked-file SHA256 verification
-- `.github/workflows/quality.yml`: read-only GitHub Actions E1
-- `tests/`: negative and positive qualification tests
+- `gads/h00.py`: pure deterministic workpackage and synthetic budget model.
+- `gads/github_gateway.py`: bounded injectable GitHub Git-CAS gateway;
+  fixed state ref, runner/source authority policy and independent GET of
+  target-run metadata.
+- `gads/readonly_probe.py`: live GET-only GitHub historical identity smoke.
+- `gads/manifest.py`: SHA256 protection for the entire tracked checkout.
+- `.github/workflows/quality.yml`: E1, with `contents:read` and
+  `actions:read` only. **No privileged gateway invocation.**
 
-No deprecated adapters, old module imports, or temporary runtime workflows.
-
-The H-00 model reserves **synthetic** budget before external effects. Uncertain
-acknowledgements and expired leases enter `UNKNOWN` and cannot blindly retry.
-Replay is idempotent only for identical request IDs and payloads. Correlation,
-repository/workflow ID, source SHA and outcome must agree before completion.
-
-This is a **pure in-memory model**. A separately approved trusted gateway must
-implement durable Git CAS, independent live GitHub attestation, real model
-spend accounting, privileged credential isolation and cross-run scheduling.
-The caller must NOT treat arbitrary untrusted target metadata as authentication.
-
-## Validate
+## Validation
 
 ```bash
 python3 -m gads.manifest verify --root .
 python3 -m unittest discover -s tests -v
 ```
 
-No paid AI or third-party Python dependency is needed for E1. GitHub Free is
-sufficient for these public read-only tests.
+Live GitHub provenance smoke executes in Actions with a read-only token.
+No Copilot upgrade, private account credential or third-party dependency is
+required.
 
-**Security and adoption:** issue #8 remains open. No automatic merge, protected
-main writes, private sources, credentials, deployments or customer data.
+## Security status
+
+A pinned policy permits H-00 gateway use only from approved protected-main
+source, against one state ref. **Code-level scoping does not narrow GitHub
+token privileges.** Actual live trusted-writer deployment remains blocked by
+security issue #8 and independent reviewer/owner approval.
+
+Correlated target attestation is a testable API contract in this candidate,
+not live verified end-to-end. Real model costs, durable outbox, multi-run
+recovery and full Mode C are **NOT PROVEN**.

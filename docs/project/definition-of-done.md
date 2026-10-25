@@ -1,14 +1,18 @@
-# DoD — GADS clean development candidate v0.2.0
+# DoD — GADS v0.2.1 trusted gateway candidate
 
-- [x] One canonical H-00 implementation; no inherited C06–C10 runtime modules.
-- [x] Temporary C05 demonstration runtime removed from this candidate.
-- [x] Read-only CI only, with no feature-branch write-token workflow.
-- [x] Complete source manifest and positive/adversarial tests pass on GitHub.
-- [x] Immutable historical public run/commit evidence referenced, not imported.
-- [ ] Independent review verifies controls before any protected-main merge.
-- [ ] Trusted GitHub API attestations + durable CAS + event correlation.
-- [ ] Actual model costs and retry caps, not synthetic reserved units.
-- [ ] Fresh unattended cross-run recovery test after actual failed workflow.
-- [ ] Explicit owner approval and security signoff before adoption.
+- [x] Canonical H-00 pure deterministic state machine, no old compatibility.
+- [x] Bounded GitHub REST adapter for one fixed ref/file, no force push.
+- [x] Policy verifies repository ID, protected-main source SHA, runner ref.
+- [x] Immutable ref/state/blob digest and strict scope validation.
+- [x] 409/422 CAS conflicts fail closed, without automatic retry.
+- [x] Correlated target attestation contract independently requests GitHub run.
+- [x] Security unit tests simulate write conflict, forged target and stale owner.
+- [x] Hosted E1: manifest, all tests and historical GET-only probe PASS on repaired gateway source SHA; documentation-head CI must be reconfirmed.
+- [ ] Unique run-name correlation proven with a new reviewed target workflow.
+- [ ] Real approved protected-main writer uses durable GitHub CAS (NOT deployed).
+- [ ] Real external-cost provider budgets and uncertain-dispatch outbox.
+- [ ] Historical SEC-01 branch writers and SEC-02 approval rules remediated.
+- [ ] Full unattended recovery and separate independent security review.
+- [ ] Explicit owner merge/adoption decision.
 
-**This E1 implementation alone cannot qualify Mode C.**
+This code may have data-writing functions but **no production authorization**.
