@@ -35,6 +35,15 @@ class ReviewBlocked(ValueError):
     pass
 
 
+def _unique_pairs(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ReviewBlocked("DUPLICATE_MODEL_JSON_KEY")
+        result[key] = value
+    return result
+
+
 def canonical(obj):
     return json.dumps(obj, ensure_ascii=True, sort_keys=True,
                       separators=(",", ":")).encode("ascii")
@@ -78,8 +87,21 @@ def snapshot(get, number, expected_head):
                 status not in ("added", "modified", "removed") or
                 not isinstance(patch, str) or not patch.strip()):
             raise ReviewBlocked("UNREVIEWABLE_FILE_OR_DIFF")
+        adds, dels, changes = item.get("additions"), item.get("deletions"), item.get("changes")
+        if (not patch.startswith("@@ ") or
+                any(type(n) is not int or n < 0 for n in (adds, dels, changes)) or
+                adds + dels != changes):
+            raise ReviewBlocked("UNVERIFIED_PATCH_COUNTS")
+        lines = patch.splitlines()
+        seen_add = sum(line.startswith("+") and not line.startswith("+++")
+                       for line in lines)
+        seen_del = sum(line.startswith("-") and not line.startswith("---")
+                       for line in lines)
+        if (seen_add, seen_del) != (adds, dels):
+            raise ReviewBlocked("INCOMPLETE_OR_TRUNCATED_PATCH")
         used.add(name)
-        files.append({"path": name, "status": status, "patch": patch})
+        files.append({"path": name, "status": status, "patch": patch,
+                      "additions": adds, "deletions": dels})
     data = {"schema": "gads.j01-diff.v1", "repository": REPO,
             "pr_number": number, "base_head": base,
             "reviewed_head": expected_head,
@@ -118,7 +140,7 @@ def infer(transport, model, data):
     if not isinstance(body, str) or not 1 <= len(body.encode("utf-8")) <= 8192:
         raise ReviewBlocked("MODEL_RESPONSE_BOUNDS")
     try:
-        result = json.loads(body)
+        result = json.loads(body, object_pairs_hook=_unique_pairs)
     except ValueError as err:
         raise ReviewBlocked("MALFORMED_MODEL_JSON") from err
     if not isinstance(result, dict) or set(result) != {"decision", "findings"}:

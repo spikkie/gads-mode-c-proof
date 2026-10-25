@@ -9,7 +9,8 @@ writer rights. J-01 reads a bounded immutable PR diff by GitHub GET and
 reviews it in a newly constructed two-message, tool-free Ollama context.
 The model can neither modify code nor decide human adoption.
 
-The runner refuses missing/binary/truncated changes, oversized diffs,
+The runner refuses missing/binary/truncated changes (enforce GitHub additions/deletions
+and patch-line count equivalence), oversized diffs,
 wrong repo identity, SHA changes during snapshot or inference, incomplete
 model output, model tool calls, unexpected URLs and GitHub POST. Local
 Ollama endpoint is restricted to http://127.0.0.1:11434/api/chat,

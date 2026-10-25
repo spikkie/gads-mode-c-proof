@@ -39,3 +39,6 @@ Adds bounded GET-only GitHub snapshot, fresh Ollama protocol, J-01 report,
 and protected-main-only workflow proposal. Feature-branch workflow is not
 trusted and no protected-main deployment, real model call or write token
 has been authorized. CI evidence will be recorded after final-head runs.
+
+SEC-02.1 security hardening: reject GitHub truncated diff patches by
+cross-checking addition/deletion counts and reject duplicate model JSON keys.
