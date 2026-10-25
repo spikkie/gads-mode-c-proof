@@ -1,16 +1,17 @@
 # Changelog
 
-## 0.2.1-candidate — 2026-10-25
+## 0.2.2-candidate — 2026-10-25
+- Identified REST `force:false` as fast-forward-only, not atomic expected-old
+  commit compare-and-swap. Refactored gateway to GraphQL `updateRefs`
+  `beforeOid` / `afterOid` request with fail-closed unknown outcomes.
+- Added adversarial test cases for stale expected-head writes, missing GraphQL
+  acknowledgement, and a timeout after a mutation possibly succeeded.
+- Exercised real synthetic Git branch race without Actions write tokens.
+- No backward compatibility with prior proof implementations.
+- Remains an unmerged security-reviewed candidate only.
 
-- Added exactly one canonical injectable trusted GitHub CAS gateway, with
-  source-identity policy, content digest checks, no-force ref writes and
-  readback verification.
-- Added independent read-only live GitHub identity probe and adversarial
-  simulated CAS/concurrent-writer and attestation tests.
-- No old C-06..C-10 adapter or compatibility layer, privileged Actions
-  workflow, provider billing or production operations.
-- Still draft / not merged / not adopted.
+## 0.2.1-candidate — 2026-10-25
+- Read-only gateway identity probe; simulated Git ref updates (57 E1 cases).
 
 ## 0.2.0-candidate — 2026-10-25
-
-- Created clean H-00 deterministic model and strict read-only E1 baseline.
+- Canonical pure deterministic H-00 model and tracked SHA256 manifest.

@@ -1,23 +1,16 @@
-# Status — GADS v0.2.1 trusted gateway candidate
+# GADS status — exact-old-SHA atomic state update candidate
 
-2026-10-25: Separate development branch directly based on the canonical H-00
-v0.2.0 draft PR #10. The new gateway is a **candidate only**; no approved
-protected-main runner, writable token or Git state ref bootstrap is installed.
+2026-10-25: v0.2.1 source E1 passed 57/57 tests. The security review found
+that REST `force:false` is only a fast-forward check; 0.2.2 replaces the
+proposed state update with injectable GraphQL `updateRefs` carrying
+`beforeOid` and `afterOid` plus fail-closed unknown-ack handling.
 
-Added fixed-policy Git-CAS read/update adapter with readback and fail-closed
-conflict handling, independent target-run GET checks, simulated adversarial
-API tests and a read-only live historical GitHub provenance probe.
+Live GitHub public synthetic branch `qualification/gads-cas-isolated-20261025`
+was initialized from protected main. Competing writer A succeeded; writer B
+returned an unknown GitHub GraphQL error. Live ref readback found winner A,
+generation 1. This is **not** a live end-to-end `updateRefs(beforeOid)`
+proof and must not be called approved atomic CAS.
 
-GitHub E1 on final source SHA still required. Earlier v0.2.0 clean H-00 E1
-succeeded with 26/26 tests; do not treat that as v0.2.1 acceptance.
-
-Security issue #8, historical unprotected branch writers, independent human
-approval/strict checks, real billable Copilot ceilings and unattended cross-run
-recovery remain OPEN. No merge, private writes or production use.
-
-## Live v0.2.1 validation — 2026-10-25
-
-- [Read-only gateway CI #40186008343](https://github.com/spikkie/gads-mode-c-proof/actions/runs/40186008343), source SHA `d33e13f56619c5e12facf7b42557566cd931534d`: **SUCCESS**, 57/57 E1 tests, complete 25-file manifest and `GADS_GATEWAY_LIVE_READONLY_PASS` against protected main SHA `43cb1e6924d208288350d70b7b273f7cd3def0c4` plus prior target run `40093613654`.
-- First run #40185898162 failed one error-classification regression for corrupt Git blob; repaired without weakening the integrity check. Final successful source is the repaired SHA above.
-- No real state-ref write, no privileged token, no model spending and no new dispatch. The correlated target-run-name assumption remains pending independent real-world verification.
-- Final documented PR-head requires fresh CI after this report commit.
+Final-head CI and independent review remain required. Security issue #8,
+unprotected legacy branch writers, human approval rules, provider billing
+and unattended recovery remain OPEN. No merged PR or main/private writes.

@@ -1,18 +1,18 @@
-# DoD — GADS v0.2.1 trusted gateway candidate
+# DoD — GADS 0.2.2 atomic state candidate
 
-- [x] Canonical H-00 pure deterministic state machine, no old compatibility.
-- [x] Bounded GitHub REST adapter for one fixed ref/file, no force push.
-- [x] Policy verifies repository ID, protected-main source SHA, runner ref.
-- [x] Immutable ref/state/blob digest and strict scope validation.
-- [x] 409/422 CAS conflicts fail closed, without automatic retry.
-- [x] Correlated target attestation contract independently requests GitHub run.
-- [x] Security unit tests simulate write conflict, forged target and stale owner.
-- [x] Hosted E1: manifest, all tests and historical GET-only probe PASS on repaired gateway source SHA; documentation-head CI must be reconfirmed.
-- [ ] Unique run-name correlation proven with a new reviewed target workflow.
-- [ ] Real approved protected-main writer uses durable GitHub CAS (NOT deployed).
-- [ ] Real external-cost provider budgets and uncertain-dispatch outbox.
-- [ ] Historical SEC-01 branch writers and SEC-02 approval rules remediated.
-- [ ] Full unattended recovery and separate independent security review.
-- [ ] Explicit owner merge/adoption decision.
+- [x] Clean canonical H-00 implementation and no legacy C06–C10 wrappers.
+- [x] Reviewed REST non-force semantics; removed false general CAS assertion.
+- [x] GraphQL `updateRefs` implementation contract includes immutable
+      `beforeOid`, `afterOid`, `force:false`, exact ref and repo ID.
+- [x] Ambiguous/timeout GraphQL responses do not authorize retries.
+- [x] Public synthetic live branch exercise with two competing Git commits;
+      writer A persists and B yields unknown result; readback confirms A.
+- [ ] Final-head GitHub E1 on all deterministic/adversarial unit tests.
+- [ ] Actual GraphQL `beforeOid` live mutation and conflict response test
+      with a separately approved privileged trusted runner.
+- [ ] Enforced ref writer authority (repository-scoped tokens are insufficient).
+- [ ] Security issue #8, protected-main independent approvals, strict CI.
+- [ ] Real source correlation, vendor usage budget, outbox, unattended recovery.
+- [ ] Independent reviewer and owner approve any merge/deployment/adoption.
 
-This code may have data-writing functions but **no production authorization**.
+Not released. Green E1 is not security signoff.

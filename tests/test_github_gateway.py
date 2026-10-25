@@ -25,7 +25,8 @@ class FakeGitHub:
         self.created_blobs = {}
         self.commits = {}
         self.posts = []
-        self.patches = []
+        self.cas_calls = []
+        self.uncertain_after_commit = False
         self.reject_patch = None
         self.bad_readback = False
         self.mutate_blob = False
@@ -33,6 +34,29 @@ class FakeGitHub:
         self.wrong_repo = False
         self.target_override = {}
         self.last_target = None
+
+    def graphql(self, query, variables):
+        self.cas_calls.append((query, deepcopy(variables)))
+        assert "updateRefs" in query and "UpdateRefsInput!" in query
+        op = variables["input"]
+        assert op["repositoryId"] == "R_kgDO-public-synthetic-cas"
+        assert len(op["refUpdates"]) == 1
+        update = op["refUpdates"][0]
+        assert update["name"] == STATE_REF and update["force"] is False
+        if self.reject_patch in (409,422):
+            return {"errors":[{"message":"beforeOid mismatch"}]}
+        if update["beforeOid"] != self.tip:
+            return {"errors":[{"message":"beforeOid mismatch"}]}
+        assert update["afterOid"] == self.pending_sha
+        self.tip = self.pending_sha
+        self.tree = self.new_tree
+        self.raw = self.created_blobs[self.pending_blob]
+        self.current = json.loads(self.raw)
+        if self.bad_readback:
+            self.tip = "e" * 40
+        if self.uncertain_after_commit:
+            raise ApiError(504)
+        return {"data":{"updateRefs":{"clientMutationId":op["clientMutationId"]}}}
 
     def call(self, method, path, payload=None):
         prefix = "/repos/" + self.policy.repository
@@ -42,6 +66,7 @@ class FakeGitHub:
             if route == "":
                 return {"id": self.policy.repository_id + int(self.wrong_repo),
                         "full_name": self.policy.repository,
+                        "node_id": "R_kgDO-public-synthetic-cas",
                         "private": False, "default_branch": "main"}
             if route == "/branches/main":
                 return {"protected": not self.unsafe_main,
@@ -91,20 +116,6 @@ class FakeGitHub:
                 self.commits[self.pending_sha]=payload
                 return {"sha":self.pending_sha}
             raise AssertionError("unexpected POST: "+route)
-        if method == "PATCH":
-            self.patches.append((route, deepcopy(payload)))
-            assert route == "/git/refs/heads/" + STATE_REF[len("refs/heads/"):]
-            assert payload.get("force") is False
-            if self.reject_patch is not None:
-                raise ApiError(self.reject_patch)
-            assert payload["sha"]==self.pending_sha
-            self.tip=self.pending_sha
-            self.tree=self.new_tree
-            self.raw=self.created_blobs[self.pending_blob]
-            self.current=json.loads(self.raw)
-            if self.bad_readback:
-                self.tip="e"*40
-            return {"ref":STATE_REF,"object":{"sha":self.tip}}
         raise AssertionError("unexpected method: "+method)
 
 
@@ -131,8 +142,8 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(receipt["ref_sha"],"d"*40)
         self.assertEqual(receipt["state"]["stage"],"LEASED")
         self.assertEqual(receipt["state"]["units_reserved"],1)
-        self.assertEqual(len(self.api.patches),1)
-        self.assertFalse(self.api.patches[0][1]["force"])
+        self.assertEqual(len(self.api.cas_calls),1)
+        self.assertFalse(self.api.cas_calls[0][1]["input"]["refUpdates"][0]["force"])
 
     def test_duplicate_exact_event_no_mutation(self):
         self.claim()
@@ -140,14 +151,14 @@ class GatewayTests(unittest.TestCase):
         replay=self.g.transition(self.command(owner="h00-controller"),101)
         self.assertEqual(replay["changed"],False)
         self.assertEqual(len(self.api.posts),start)
-        self.assertEqual(len(self.api.patches),1)
+        self.assertEqual(len(self.api.cas_calls),1)
 
     def test_replay_id_collision_denied(self):
         self.claim()
         with self.assertRaisesRegex(h00.Blocked,"REPLAY_COLLISION"):
             self.g.transition(self.command(owner="h00-controller",id="evt-1",
                                            fence="f999"),102)
-        self.assertEqual(len(self.api.patches),1)
+        self.assertEqual(len(self.api.cas_calls),1)
 
     def test_stale_owner_denied(self):
         with self.assertRaisesRegex(Blocked,"CLAIM_OWNER_DENIED"):
@@ -195,22 +206,22 @@ class GatewayTests(unittest.TestCase):
 
     def test_conflict_409_never_retry(self):
         self.api.reject_patch=409
-        with self.assertRaisesRegex(Blocked,"CAS_CONFLICT_NO_RETRY"):
+        with self.assertRaisesRegex(Blocked,"CAS_REJECTED_NO_RETRY"):
             self.claim()
-        self.assertEqual(len(self.api.patches),1)
+        self.assertEqual(len(self.api.cas_calls),1)
         self.assertEqual(self.api.tip,"a"*40)
 
     def test_conflict_422_never_retry(self):
         self.api.reject_patch=422
-        with self.assertRaisesRegex(Blocked,"CAS_CONFLICT_NO_RETRY"):
+        with self.assertRaisesRegex(Blocked,"CAS_REJECTED_NO_RETRY"):
             self.claim()
-        self.assertEqual(len(self.api.patches),1)
+        self.assertEqual(len(self.api.cas_calls),1)
 
     def test_post_commit_readback_mismatch_blocks(self):
         self.api.bad_readback=True
         with self.assertRaisesRegex(Blocked,"CAS_READBACK_MISMATCH"):
             self.claim()
-        self.assertEqual(len(self.api.patches),1)
+        self.assertEqual(len(self.api.cas_calls),1)
 
     def test_missing_ref_denied(self):
         original=self.api.call
@@ -243,7 +254,7 @@ class GatewayTests(unittest.TestCase):
         with self.assertRaisesRegex(Blocked,"TARGET_NOT_ATTESTED"):
             self.g.transition(self.command("confirm","evt-2",owner="h00-controller",
                                             fence="f1",target=40093613654),101)
-        self.assertEqual(len(self.api.patches),1)
+        self.assertEqual(len(self.api.cas_calls),1)
 
     def test_wrong_target_workflow_denied(self):
         self.claim()
@@ -284,11 +295,69 @@ class GatewayTests(unittest.TestCase):
 
     def test_no_force_no_arbitrary_state_file(self):
         self.claim()
-        patches=[p for p,_ in self.api.patches]
-        self.assertEqual(patches,["/git/refs/heads/qualification/gads-h00-state-v1"])
+        requested=[x[1]["input"]["refUpdates"][0] for x in self.api.cas_calls]
+        self.assertEqual(len(requested),1)
+        self.assertEqual(requested[0]["name"], STATE_REF)
+        self.assertEqual(requested[0]["beforeOid"],"a"*40)
+        self.assertEqual(requested[0]["afterOid"],"d"*40)
+        self.assertIs(requested[0]["force"],False)
         writes=[x for x in self.api.posts if x[0]=="/git/trees"]
         self.assertEqual(len(writes),1)
         self.assertEqual(writes[0][1]["tree"][0]["path"],"state/h00.json")
+
+
+
+    def test_graphql_server_side_before_oid_required(self):
+        self.claim()
+        body=self.api.cas_calls[0][1]["input"]
+        self.assertEqual(body["repositoryId"],"R_kgDO-public-synthetic-cas")
+        self.assertEqual(body["refUpdates"][0]["beforeOid"],"a"*40)
+        self.assertEqual(body["refUpdates"][0]["afterOid"],"d"*40)
+
+    def test_unknown_ack_after_committed_state_is_not_retried(self):
+        self.api.uncertain_after_commit=True
+        with self.assertRaisesRegex(Blocked,"CAS_OUTCOME_UNKNOWN_NO_RETRY"):
+            self.claim()
+        self.assertEqual(len(self.api.cas_calls),1)
+        self.assertEqual(self.api.current["stage"],"LEASED")
+        self.assertEqual(self.api.tip,"d"*40)
+        self.api.uncertain_after_commit=False
+        read_tip,state=self.g.read()
+        self.assertEqual(read_tip,"d"*40)
+        self.assertEqual(state["units_reserved"],1)
+
+    def test_same_old_ref_cannot_overwrite_advanced_tip(self):
+        self.claim()
+        # second writer already knew old head but cannot update after it moved
+        answer=self.api.graphql("mutation UpdateRefs($input: UpdateRefsInput!) { updateRefs(input:$input) { clientMutationId } }",
+          {"input":{"repositoryId":"R_kgDO-public-synthetic-cas",
+                    "clientMutationId":"second-writer",
+                    "refUpdates":[{"name":STATE_REF,"beforeOid":"a"*40,
+                                   "afterOid":"d"*40,"force":False}]}})
+        self.assertTrue(answer.get("errors"))
+        self.assertEqual(self.api.tip,"d"*40)
+
+    def test_missing_mutation_ack_denied_no_retry(self):
+        original=self.api.graphql
+        def missing_ack(query,vars):
+            original(query,vars)
+            return {"data":{"updateRefs":None}}
+        self.api.graphql=missing_ack
+        with self.assertRaisesRegex(Blocked,"CAS_OUTCOME_UNKNOWN_NO_RETRY"):
+            self.claim()
+        self.assertEqual(len(self.api.cas_calls),1)
+
+    def test_repo_graphql_node_id_is_required(self):
+        original=self.api.call
+        def without_node_id(method,path,payload=None):
+            result=original(method,path,payload)
+            if method=="GET" and path.endswith("/gads-mode-c-proof"):
+                result.pop("node_id",None)
+            return result
+        self.api.call=without_node_id
+        with self.assertRaisesRegex(Blocked,"CAS_REPOSITORY_NODE_ID"):
+            self.claim()
+        self.assertEqual(len(self.api.cas_calls),0)
 
     def test_blob_digest_known(self):
         self.assertEqual(blob_hash(b"hello\n"),

@@ -27,6 +27,7 @@ class Blocked(h00.Blocked):
 STATE_REF = "refs/heads/qualification/gads-h00-state-v1"
 STATE_FILE = "state/h00.json"
 MAX_STATE_BYTES = 16384
+GRAPHQL_CAS_MUTATION = '''mutation GadsCAS($input: UpdateRefsInput!) { updateRefs(input: $input) { clientMutationId } }'''
 
 
 @dataclass(frozen=True)
@@ -75,8 +76,39 @@ class Gateway:
     def _post(self, path, payload):
         return self.api.call("POST", self.prefix + path, payload)
 
-    def _patch(self, path, payload):
-        return self.api.call("PATCH", self.prefix + path, payload)
+    def _atomic_cas(self, before, after):
+        """Atomic compare-and-swap via GitHub GraphQL updateRefs.beforeOid.
+
+        Unknown transport/acknowledgement outcome must not be retried blindly.
+        """
+        metadata = self._get("")
+        require(metadata.get("id") == self.policy.repository_id and
+                metadata.get("full_name") == self.policy.repository and
+                isinstance(metadata.get("node_id"), str) and
+                bool(metadata["node_id"]), "CAS_REPOSITORY_NODE_ID")
+        nonce = "gads-cas-" + before[:12] + "-" + after[:12]
+        values = {"input": {
+            "repositoryId": metadata["node_id"],
+            "clientMutationId": nonce,
+            "refUpdates": [{
+                "name": STATE_REF,
+                "beforeOid": before,
+                "afterOid": after,
+                "force": False
+            }]
+        }}
+        try:
+            reply = self.api.graphql(GRAPHQL_CAS_MUTATION, values)
+        except (ApiError, OSError, TimeoutError) as exc:
+            raise Blocked("CAS_OUTCOME_UNKNOWN_NO_RETRY") from exc
+        if not isinstance(reply, dict):
+            raise Blocked("CAS_OUTCOME_UNKNOWN_NO_RETRY")
+        if reply.get("errors"):
+            raise Blocked("CAS_REJECTED_NO_RETRY")
+        data = reply.get("data")
+        result = data.get("updateRefs") if isinstance(data, dict) else None
+        if not isinstance(result, dict) or result.get("clientMutationId") != nonce:
+            raise Blocked("CAS_OUTCOME_UNKNOWN_NO_RETRY")
 
     def authorize(self):
         p = self.policy
@@ -171,8 +203,8 @@ class Gateway:
     def transition(self, event, now):
         """Single CAS attempt. No automatic retry, force update or side effects.
 
-        This may CREATE unreachable Git objects before the ref CAS; a ref
-        conflict is terminal for this invocation. No state ref seeding here.
+        This may CREATE unreachable Git objects before the atomic beforeOid
+        validation. Unknown or rejected outcomes are fail-closed, no retries.
         """
         tip, current = self.read()
         require(isinstance(event, dict), "EVENT_TYPE")
@@ -216,13 +248,7 @@ class Gateway:
         sha = commit.get("sha")
         require(isinstance(sha, str) and h00.HEX40.fullmatch(sha),
                 "COMMIT_UNVERIFIED")
-        try:
-            self._patch("/git/refs/heads/" + STATE_REF.removeprefix("refs/heads/"),
-                        {"sha": sha, "force": False})
-        except ApiError as exc:
-            if exc.status in (409, 422):
-                raise Blocked("CAS_CONFLICT_NO_RETRY") from exc
-            raise
+        self._atomic_cas(tip, sha)
         observed_tip, observed_state = self.read()
         require(observed_tip == sha and observed_state == after,
                 "CAS_READBACK_MISMATCH")

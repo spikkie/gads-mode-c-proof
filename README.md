@@ -1,6 +1,6 @@
 # GitHub Autonomous Development Standard — clean H-00 baseline
 
-**v0.2.1 development candidate · public synthetic only · NOT ADOPTED**
+**v0.2.2 development candidate · public synthetic only · NOT ADOPTED**
 
 The canonical code in `gads/` is developed without backward compatibility
 with C-05..C-10 proof runners. The old evidence and commit SHAs remain linked
@@ -38,3 +38,5 @@ security issue #8 and independent reviewer/owner approval.
 Correlated target attestation is a testable API contract in this candidate,
 not live verified end-to-end. Real model costs, durable outbox, multi-run
 recovery and full Mode C are **NOT PROVEN**.
+
+0.2.2 requires GraphQL `updateRefs(beforeOid, afterOid)`. REST `force:false` alone is only fast-forward protection. Real write-token installation and GraphQL live proof remain blocked pending independent review.

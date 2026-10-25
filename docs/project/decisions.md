@@ -9,7 +9,7 @@
   with actual premium-request or monetary billing enforcement.
 - **D-005:** Source ref is fixed in trusted code and pinned to reviewed SHA;
   repository-scoped GitHub token rights are NOT restricted to this ref.
-- **D-006:** GitHub CAS: commit against observed ref SHA, non-force update,
+- **D-006:** GitHub CAS: commit against observed ref SHA, GraphQL updateRefs with exact beforeOid and afterOid,
   readback; a CAS race blocks instead of automatic retry.
 - **D-007:** Actor, workflow, SHA and run-name correlation must be fetched
   from GitHub by the gateway. API `display_title` proof remains pending.
