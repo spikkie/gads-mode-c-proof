@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.5 SEC-02.2 candidate — 2026-10-25
+- Reject public GitHub self-hosted runner due to trust-boundary exposure.
+- Correct workflow_dispatch/required PR-status design assumption.
+- Add credentialless pull-only local reviewer, tests and threat model.
+- No trusted model review, protected-main merge, release or writer grant.
+
 ## 0.2.4 SEC-02.1 candidate — 2026-10-25
 - Added read-only bounded J-01 GitHub PR snapshot + local-only Ollama runner.
 - Added new two-message context, model output contract and exact-head attestation.

@@ -42,3 +42,10 @@ has been authorized. CI evidence will be recorded after final-head runs.
 
 SEC-02.1 security hardening: reject GitHub truncated diff patches by
 cross-checking addition/deletion counts and reject duplicate model JSON keys.
+
+## v0.2.5 — SEC-02.2 architecture correction
+Static first-party review found HIGH public Actions self-hosted runner
+compromise risk and the missing required PR-check event provenance.
+New clean development branch removes that workflow, adds pull-only
+credentialless local J-01 observations with explicit non-authority.
+Final-head CI pending. No real Ollama review, merge or approved runner.

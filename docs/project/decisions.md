@@ -27,3 +27,10 @@
 - D-014: Only independently audited protected-main code on a restricted
   ephemeral runner can claim trusted J-01 artifacts; a candidate workflow
   running on an unprotected branch NEVER grants writer authority.
+
+- D-015 SEC-02.2: No public-repository self-hosted GitHub Actions runner.
+  Existing J-01 workflow proposal is insecure and must not be deployed.
+- D-016: Local pull-only J-01 yields non-authoritative observation only;
+  model APPROVE is never owner release or writer authorization.
+- D-017: Independently verified sandbox, authenticated trusted publisher
+  and exact-PR-head required checks are separate open gates.

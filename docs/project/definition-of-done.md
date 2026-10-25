@@ -35,3 +35,15 @@ not evidence of a running J-01. Source and private repositories unchanged.
 - [ ] Exact PR SHA status independently issued and made required.
 - [ ] Human approval for any source-main merge or writer authority.
 **Runtime still BLOCKED; tests are not real independent AI execution.**
+
+## SEC-02.2 v0.2.5 gate
+- [x] Security finding: public self-hosted GitHub Actions runner forbidden.
+- [x] Remove proposed unsafe workflow from canonical candidate.
+- [x] Credentialless pull-only model observation + adversarial tests.
+- [ ] Final-head hosted E1, manifest and read-only live security gate PASS.
+- [ ] True independent J-01 source audit in separate context.
+- [ ] Isolated sandbox and egress enforcement demonstrated.
+- [ ] Real local model review + verifiable signed provenance.
+- [ ] Trusted exact-head check issuer, owner approval and protected-main
+      deployment/merge independently qualified.
+NOT RELEASED. Do not treat a passing local mock as trust proof.

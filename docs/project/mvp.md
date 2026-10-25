@@ -15,3 +15,8 @@ J-01 read-only runtime candidate: bounded authenticated GitHub PR snapshots,
 no-code-checkout, local Ollama /api/chat fresh context without tools,
 immutable diff digest and proposed attestation uploader. Private and paid
 provider calls remain out of scope; trusted deployment pending approval.
+
+## v0.2.5 SEC-02.2 correction
+Public GitHub runner registration is excluded. A credentialless local
+pull-only J-01 process may produce *only* an untrusted review observation.
+Source/merge/writer trust remains behind independent approval.
