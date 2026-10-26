@@ -268,6 +268,77 @@ class ModelBatch(unittest.TestCase):
         scoreboard = bench.aggregate(bench.load_oracle(), [r])
         self.assertGreater(scoreboard["models"][0]["contradiction_signals"], 0)
 
+    def test_prompt_contract_is_explicit_and_distinct(self):
+        self.assertIn("When decision is APPROVE, findings MUST be []",
+                      bench.BENCHMARK_RESPONSE_RULE)
+        self.assertEqual(len(bench.PROMPT_CONTRACT_SHA256), 64)
+        self.assertEqual(bench.REPORT, "gads.sec028.untrusted-model-batch.v2")
+
+    def test_benchmark_model_receives_explicit_contract_once(self):
+        suite = bench.load_oracle()
+        payloads = []
+        def observe(payload):
+            payloads.append(payload)
+            self.assertEqual(len(payload["messages"]), 2)
+            self.assertIn(bench.BENCHMARK_RESPONSE_RULE,
+                          payload["messages"][0]["content"])
+            self.assertEqual(payload["messages"][0]["role"], "system")
+            self.assertEqual(payload["messages"][1]["role"], "user")
+            self.assertNotIn("expected_decision",
+                             payload["messages"][1]["content"])
+            self.assertNotIn("tools", payload)
+            return {"model": MODEL, "done": True,
+                    "message": {"role": "assistant", "content":
+                                '{"decision":"APPROVE","findings":[]}' }}
+        result = bench.run_batch(suite, model=MODEL, batch=1, repeats=1,
+                                 get=local_get, call=observe)
+        self.assertEqual(len(payloads), 5)
+        self.assertEqual(result["prompt_contract_sha256"],
+                         bench.PROMPT_CONTRACT_SHA256)
+        self.assertEqual(result["samples"][0]["decision"], "APPROVE")
+        self.assertEqual(result["samples"][1]["decision"], "APPROVE")
+
+    def test_conflicting_approvals_still_fail_closed_and_are_counted(self):
+        suite = bench.load_oracle()
+        def realistic_model(payload):
+            content = payload["messages"][1]["content"]
+            safe = any(rt.canonical(bench.input_for_model(c)).decode("ascii") in content
+                       for c in (suite["cases"][0], suite["cases"][3]))
+            response = {"decision": "APPROVE" if safe else "REQUEST_CHANGES",
+                        "findings": (["Looks good, strengthened security"]
+                                     if safe else [FINDINGS])}
+            return {"model": MODEL, "done": True,
+                    "message": {"role": "assistant", "content": json.dumps(response)}}
+        result = bench.run_batch(suite, model=MODEL, batch=1, repeats=1,
+                                 get=local_get, call=realistic_model)
+        self.assertEqual([s["decision"] for s in result["samples"]],
+                         ["ERROR", "REQUEST_CHANGES", "REQUEST_CHANGES",
+                          "ERROR", "REQUEST_CHANGES"])
+        score = bench.aggregate(suite, [result])["models"][0]
+        self.assertEqual(score["decision_correct"], 3)
+        self.assertEqual(score["errors"], 2)
+        self.assertEqual(score["error_codes"], {"CONFLICTING_APPROVAL": 2})
+        self.assertEqual(score["false_positives"], 0)
+        self.assertEqual(score["false_negatives"], 0)
+
+    def test_prior_schema_not_accepted_or_silently_mixed(self):
+        result = report()
+        result["schema"] = "gads.sec028.untrusted-model-batch.v1"
+        with self.assertRaisesRegex(rt.ReviewBlocked, "REPORT_SCHEMA"):
+            bench.aggregate(bench.load_oracle(), [result])
+
+    def test_tampered_prompt_identity_denied(self):
+        result = report()
+        result["prompt_contract_sha256"] = "f" * 64
+        with self.assertRaisesRegex(rt.ReviewBlocked, "REPORT_IDENTITY_OR_TRUST"):
+            bench.aggregate(bench.load_oracle(), [result])
+
+    def test_missing_prompt_identity_denied(self):
+        result = report()
+        del result["prompt_contract_sha256"]
+        with self.assertRaisesRegex(rt.ReviewBlocked, "REPORT_SCHEMA"):
+            bench.aggregate(bench.load_oracle(), [result])
+
 
 class LocalFileAndConsent(unittest.TestCase):
     def test_plan_has_no_model_or_network(self):
