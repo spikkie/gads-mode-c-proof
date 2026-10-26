@@ -1,8 +1,8 @@
-# GADS v0.2.11 SEC-02.8 — CANDIDATE
+# GADS v0.2.11.1 SEC-02.8 repair candidate
 
-**NOT RELEASED / NOT MERGED / NOT ADOPTED / MODE C BLOCKED.**
-Balanced security test corpus and independent-metadata deterministic
-scorer in untrusted Mac-native development. The authored oracle itself
-is not independently audited; regex findings are only heuristic.
-No real twenty-case model comparison executed, OS VM isolation,
-authenticated status issuer, private state writer or owner merge.
+Not released / not merged / not adopted. The original operator Mac
+Gemma batch-1 observation remains 3 decision-correct, 2 contract errors.
+v2 prompt-rules clarification and strict error reporting need actual
+Mac rerun. Source-authored oracle is not independently adjudicated;
+no isolated J-01, verified GitHub check issuer, owner-approved source-main
+merge or state-only writer. Full Mode C writer authority remains BLOCKED.

@@ -49,3 +49,11 @@
   Mac runs explicit, one model/five cases at a time; no auto promotion.
 - D-026: Publish only synthetic development code. Scores cannot issue
   trusted status, merge, authorize writers or attest isolated J-01.
+
+- D-027: CONTRADICTORY APPROVAL is a model-output-contract failure, not an
+  implicit model judgement success; never repair by weakening J-01 validator.
+- D-028: Clarify approval schema only in untrusted evaluation system prompt;
+  do not change security baseline or source review trust boundary.
+- D-029: Version benchmark report/score to v2 and SHA-bind prompt contract.
+  Prior results are retained, never silently normalized/mixed; error counts
+  are explicit. New Mac inference requires another operator invocation.

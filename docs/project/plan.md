@@ -57,3 +57,12 @@ E. [operator] Optional sequential Gemma/GPT-OSS/Qwen real 20-case runs,
    first run only batch 1 for each; never concurrent GPU models.
 F. [independent] Audit model findings and corpus labeling, expand hidden
    cases and repeat stability; VM trusted J-01 and issuer remain later gates.
+
+## v0.2.11.1 repair sequence
+A. Repair only benchmark response protocol and persist prompt fingerprint.
+B. Add tests confirming no auto-normalization of contradictory approvals.
+C. Verify final exact-SHA push and PR E1; writer remains BLOCKED.
+D. Operator reruns **only Gemma batch 1** from separate detached worktree
+   to a NEW v2 report filename, scores separately, reviews case-level errors.
+E. Continue other batches/models only if remaining output-contract issues
+   are understood; run strict independent semantics review later.

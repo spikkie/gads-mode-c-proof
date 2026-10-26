@@ -47,3 +47,12 @@ single untrusted model observations, not accuracy ranking evidence.
 New fixed balanced 20-case benchmark, model-blind inputs and offline
 heuristic scoring. Local 20-case evaluations NOT run; no Mac host access,
 no trusted status, no source-main merge. Candidate head CI pending.
+
+## SEC-02.8 repair v0.2.11.1 — 2026-10-26
+Operator Mac Gemma first 5 cases: 3 correct negative-case verdicts (U01,
+A01, U02) and 2 model output contract ERROR (S01/S02 expected safe APPROVE,
+but model APPROVE+nonempty findings). Zero observed FP/FN only among
+schema-valid decisions; not 5/5 accuracy. Historical v1 benchmark report
+dataset digest `730edb49dfa069d8594f3bad5e1a0d79da0a81529df6fda11efe311ff8672974`
+remains unchanged. Repair in source only: benchmark-specific explicit
+approval rule, v2 prompt identity and error-code metrics; no real rerun.

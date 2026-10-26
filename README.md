@@ -69,3 +69,14 @@ recalculate decision false-positive/false-negative and heuristic factual
 signals. Model never sees expected labels, grading rules or oracle
 rationale. No trusted review or GitHub writer authorization is possible.
 See `docs/security/sec02-8-evaluation-v0.2.11.md`.
+
+## SEC-02.8 repair v0.2.11.1 — approval protocol
+Actual operator Gemma batch-1: S01/S02 both reported `CONFLICTING_APPROVAL`
+(expected safe), while U01/A01/U02 produced correct REQUEST_CHANGES.
+The model supplied APPROVE **with nonempty findings**; J-01 rightfully
+rejects this schema contradiction. The new benchmark-only system instruction
+explicitly requires findings=[] on APPROVE, preserving strict validation.
+New report/score v2 schemas include a prompt-contract fingerprint, and
+the scorer exposes error-code counts. Prior v1 observations remain 3/5,
+2 errors, and are never reclassified or mixed with the new experiment.
+See `docs/security/sec02-8-approval-contract-v0.2.11.1.md`.

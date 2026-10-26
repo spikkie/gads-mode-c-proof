@@ -11,6 +11,7 @@ on:
       - development/gads-sec02-6-offline-v0.2.9-20261025
       - development/gads-sec02-7-mac-ollama-v0.2.10-20261025
       - development/gads-sec02-8-benchmark-v0.2.11-20261025
+      - development/gads-sec02-8-approval-contract-v0.2.11.1-20261026
 permissions: {}
 jobs:
   writer_authorization:
