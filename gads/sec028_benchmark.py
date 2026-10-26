@@ -234,6 +234,8 @@ def aggregate(oracle, reports):
                 "independent_review_proven", "trusted_status_issued",
                 "writer_authorized"}:
             raise rt.ReviewBlocked("REPORT_SCHEMA_INVALID")
+        if report["schema"] != REPORT:
+            raise rt.ReviewBlocked("REPORT_SCHEMA_VERSION_INVALID")
         model, batch, repeats = report["model"], report["batch"], report["repeats"]
         if (report["schema"] != REPORT or
                 report["classification"] != "UNTRUSTED_DEVELOPMENT_BENCHMARK" or
