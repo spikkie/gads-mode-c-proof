@@ -1,5 +1,16 @@
 # Changelog — canonical GADS
 
+## v0.2.11.1 — SEC-02.8 approval-format repair candidate (2026-10-26)
+- Actual macOS Gemma batch-1 S01/S02 failed output contract with
+  CONFLICTING_APPROVAL; all three negative controls correctly REQUEST_CHANGES.
+- Clarified APPROVE -> empty findings solely in the synthetic benchmark prompt.
+- Kept trusted J-01 `rt.infer` validator unchanged; no permissive normalization.
+- Introduced v2 untrusted report/score contract with prompt SHA256 fingerprint;
+  reject mixed v1/v2 results, and expose per-error-code failure histogram.
+- Added regression tests reproducing two failed safe cases. Prior observations
+  remain immutable and counted as errors. No privileged/writer gate changes.
+
+
 ## v0.2.11 — SEC-02.8 Mac security evaluation (2026-10-25)
 - Added immutable twenty-case synthetic corpus (8 safe, 8 unsafe, 4 adversarial).
 - Added blind model inputs with oracle labels excluded from prompts.

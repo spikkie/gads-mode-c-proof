@@ -74,3 +74,14 @@ execution trust, OS isolation, production signature, or check authorization.
 - [ ] Independently audit semantic oracle and findings, repeat tests/blindness.
 - [ ] Actually provision/test isolated VM and authenticated J-01 issuer.
 - [ ] Approved source main + state repo writer; full Mode C DoD.
+
+## v0.2.11.1 SEC-02.8 approval protocol repair
+- [x] Diagnose Gemma macOS S01/S02: CONFLICTING_APPROVAL, not wrong verdict.
+- [x] Preserve trusted rt.infer strict validator (APPROVE requires findings=[]).
+- [x] Benchmark-only explicit approval contract instruction; hash/version bind.
+- [x] v2 report/score reject v1 mixing; error breakdown and adversarial tests.
+- [ ] Exact-head v0.2.11.1 CI and writer-authority fail-closed evidence.
+- [ ] Operator rerun Mac batch 1 under repaired prompt using a NEW file.
+- [ ] Interpret actual model outputs; 20-case three-model comparison later.
+- [ ] Independently audited oracle, isolated J-01, verified trusted issuer and
+      required checks, explicit owner-approved main merge, state repository writer.

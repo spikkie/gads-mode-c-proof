@@ -132,3 +132,16 @@ semantic correctness or a trust authorization.
 - https://genai.owasp.org/llmrisk/llm01-prompt-injection/
 - https://airc.nist.gov/airmf-resources/playbook/measure/
 - https://docs.ollama.com/api
+
+## Repair v0.2.11.1 (2026-10-26)
+First real operator Gemma batch-1 revealed S01 and S02 as
+`CONFLICTING_APPROVAL`: model emitted APPROVE together with
+nonempty findings; trusted `j01_runtime.infer` correctly rejected.
+The underlying model response text is not in the historical report.
+The three unsafe cases correctly returned REQUEST_CHANGES.
+Repair adds an explicit benchmark-only system prompt requiring
+`{"decision":"APPROVE","findings":[]}` for approval; **invalid replies
+remain ERROR** and are never coerced/rewritten. New evidence uses
+`gads.sec028.untrusted-model-batch.v2` and prompt-contract SHA256;
+old reports cannot be scored with the v2 scorer. Score includes
+per-model error code histogram. See versioned repair note.

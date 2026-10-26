@@ -37,3 +37,10 @@ Deterministic 20-case synthetic benchmark and predeclared test oracle:
 10 expected approvals, 10 denials. One Mac local Ollama model/batch
 per explicit opt-in, offline deterministic confusion metrics and
 heuristic fact checks; no signed provenance or privileged actions.
+
+## v0.2.11.1 benchmark response repair
+Keep strict runtime parsing: model responses APPROVE with nonempty findings
+remain ERROR. Clarify response rules inside benchmark-only system prompt;
+source-bound prompt SHA256 and explicit per-error-code reporting distinguish
+new evidence from historical v1 result (Gemma batch 1: 3 decision-correct,
+2 schema errors). No silent rewriting, no private data or writer privileges.
